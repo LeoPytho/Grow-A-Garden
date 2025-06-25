@@ -1,329 +1,408 @@
 // @project
-import branding from '@/branding.json';
-import { IconType } from '@/enum';
-import { SECTION_PATH, BUY_NOW_URL, ADMIN_PATH, DOCS_URL } from '@/path';
+import branding from '@/branding.json'; // Keep if you have a game-specific branding.json or remove if not needed.
+import { IconType } from '@/enum'; // Keep if you use IconType, otherwise consider removing.
+import { SECTION_PATH, BUY_NOW_URL, ADMIN_PATH, DOCS_URL } from '@/path'; // These will mostly be replaced or made into placeholders.
 
 const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
 
+// Helper function to create a simple SVG data URI
+const createSvgDataUri = (svgContent) => {
+  const encodedSvg = encodeURIComponent(svgContent)
+    .replace(/'/g, '%27')
+    .replace(/"/g, '%22');
+  return `data:image/svg+xml,${encodedSvg}`;
+};
+
+// Custom SVGs for the game
+const leafSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 20.3 8.6 22 14c-1.4 2.4-4.9 5.7-8.2 4.7l-4.9 1.9c-2.7 1.1-5.5-.3-6.6-3A4.995 4.005 0 0 1 11 20z"/>
+    <path d="M12 17.56a4.993 4.993 0 0 1-1.67-1.13c-2.5-2.2-1.2-5.7 1.5-7.7L21 2"/>
+  </svg>
+`);
+
+const wateringCanSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22a4 4 0 0 0 4-4V7a4 4 0 0 0-4-4H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2m0 0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h2"/>
+    <path d="M16 11a4 4 0 0 1 0 8h-4a4 4 0 0 0-4-4V7"/>
+    <path d="M7 7v4a2 2 0 0 0 2 2h2"/>
+    <line x1="8" y1="12" x2="8" y2="16"></line>
+  </svg>
+`);
+
+const shovelSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 22L4 22L4 16L6 16L6 10L10 10L10 16L12 16L12 22L20 22ZM15 4V10M17 6V12M19 8V14M16 13L13 10L16 7Z"/>
+  </svg>
+`);
+
+const friendSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+    <circle cx="9" cy="7" r="4"></circle>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+  </svg>
+`);
+
+const plantPotSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 8c0-2-2-4-4-4H8c-2 0-4 2-4 4v4h16V8z"></path>
+    <path d="M20 12H4l-1 8h18l-1-8z"></path>
+  </svg>
+`);
+
+const starRatingSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+  </svg>
+`);
+
+const trophySvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+    <path d="M4 22h16"></path>
+    <path d="M10 11V5a2 2 0 0 1 4 0v6"></path>
+    <path d="M12 17v5"></path>
+    <path d="M12 17H8.5C7.39 17 6.5 16.11 6.5 15S7.39 13 8.5 13h7c1.11 0 2 .89 2 2s-.89 2-2 2H12Z"></path>
+  </svg>
+`);
+
+const achievementSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+    <polyline points="12 8 8 12 16 16"></polyline>
+  </svg>
+`);
+
+// --- feature2 ---
 export const feature2 = {
-  heading: 'Culture of Innovation',
+  heading: 'Cultivate Your Dream Garden',
   caption:
-    'Join a team that embraces forward-thinking ideas, fosters innovation, and cultivates an environment where your creativity can flourish.',
+    'Join a vibrant community of gardeners, grow unique plants, and design your perfect plot in our ever-expanding world.',
   features: [
     {
-      icon: { name: 'tabler-users', type: IconType.STROKE, color: 'grey.900', stroke: 1 },
-      title: 'Teamwork',
-      content: 'We embrace varied perspectives and backgrounds, creating an inclusive environment.'
+      icon: { name: leafSvg, type: IconType.CUSTOM_SVG, color: 'success.main', stroke: 1 }, // Custom SVG
+      title: 'Unique Plants',
+      content: 'Discover and grow hundreds of rare and exotic plant species.'
     },
     {
-      icon: { name: 'tabler-star', type: IconType.STROKE, color: 'grey.900', stroke: 1 },
-      title: 'Inclusivity',
-      content: 'We embrace varied perspectives and backgrounds, creating an inclusive environment.'
+      icon: { name: friendSvg, type: IconType.CUSTOM_SVG, color: 'primary.main', stroke: 1 }, // Custom SVG
+      title: 'Community Events',
+      content: 'Participate in fun events and contests with fellow gardeners.'
     },
     {
-      icon: { name: 'tabler-chart-histogram', type: IconType.STROKE, color: 'grey.900', stroke: 1 },
-      title: 'Growth',
-      content: 'Our culture prioritizes continuous learning, encouraging personal and professional development. '
+      icon: { name: trophySvg, type: IconType.CUSTOM_SVG, color: 'warning.main', stroke: 1 }, // Custom SVG
+      title: 'Seasonal Challenges',
+      content: 'Test your skills in seasonal challenges to earn exclusive rewards.'
     }
   ]
 };
 
+// --- feature5 ---
 export const feature5 = {
-  heading: 'Beyond the 9-to-5',
-  caption: 'Our benefits go beyond the standard, ensuring your life outside of work is just as fulfilling.',
-  image1: '/assets/images/graphics/ai/graphics3-light.svg',
-  image2: '/assets/images/graphics/ai/graphics2-light.svg',
+  heading: 'Beyond Just Planting',
+  caption: 'Our game offers a rich experience, ensuring endless fun and interaction.',
+  image1: 'YOUR_GAME_GRAPHIC_1.png', // Placeholder for game-specific graphic
+  image2: 'YOUR_GAME_GRAPHIC_2.png', // Placeholder for game-specific graphic
   features: [
     {
-      icon: 'tabler-coin',
-      title: 'Compensation',
-      content: 'Enjoy a competitive salary that recognizes your skills and contributions.'
+      icon: wateringCanSvg, // Custom SVG
+      title: 'Automatic Watering',
+      content: 'Automate your garden care with smart watering systems.'
     },
     {
-      icon: 'tabler-health-recognition',
-      title: 'Healthcare',
-      content: "Access to a comprehensive healthcare plan, ensuring you and your family's well-being."
+      icon: plantPotSvg, // Custom SVG
+      title: 'Customizable Plots',
+      content: 'Design and decorate your garden plots with a variety of items.'
     }
   ],
   features2: [
     {
-      icon: 'tabler-briefcase',
-      title: 'Automated Scaling',
-      content: 'Embrace a flexible work environment, allowing you to balance work.'
+      icon: shovelSvg, // Custom SVG
+      title: 'Resource Gathering',
+      content: 'Explore the map to find rare seeds and crafting materials.'
     },
     {
-      icon: 'tabler-users',
-      title: 'Real-Time',
-      content: 'Support your family commitments with family-friendly policies and benefits.'
+      icon: friendSvg, // Custom SVG
+      title: 'Social Hubs',
+      content: 'Connect with friends and trade items in dedicated social zones.'
     }
   ],
   profileGroups: {
     avatarGroups: [
-      { avatar: '/assets/images/user/avatar1.png' },
-      { avatar: '/assets/images/user/avatar2.png' },
-      { avatar: '/assets/images/user/avatar3.png' },
-      { avatar: '/assets/images/user/avatar4.png' },
-      { avatar: '/assets/images/user/avatar5.png' }
+      { avatar: 'YOUR_PLAYER_AVATAR_1.png' }, // Placeholder for player avatars
+      { avatar: 'YOUR_PLAYER_AVATAR_2.png' },
+      { avatar: 'YOUR_PLAYER_AVATAR_3.png' },
+      { avatar: 'YOUR_PLAYER_AVATAR_4.png' },
+      { avatar: 'YOUR_PLAYER_AVATAR_5.png' }
     ],
-    review: '10k+ Reviews (4.5 out of 5)'
+    review: '10k+ Positive Reviews (4.5 out of 5 Stars)' // Adjusted for game context
   },
-  content: 'Explore diverse career paths within the company through our internal mobility programs.',
-  actionBtn: { children: 'Explore all Features', href: '#' }
+  content: 'Discover new game modes, hidden areas, and special events with regular updates.',
+  actionBtn: { children: 'Join the Community', href: 'YOUR_GAME_DISCORD_LINK_HERE' } // Placeholder for Discord/Community link
 };
 
+// --- feature20 ---
 export const feature20 = {
-  heading: 'Comprehensive UI Kit Tailored to your Need',
-  caption: 'Ready to transform your SaaS designs with one powerful UI Kit?',
-  actionBtn: { children: 'Buy Now', href: BUY_NOW_URL, ...linkProps },
-  secondaryBtn: { children: 'Explore Blocks', href: SECTION_PATH },
+  heading: 'Your Ultimate Gardening Experience',
+  caption: 'Ready to immerse yourself in the world of "Grow A Garden Map Game"?',
+  actionBtn: { children: 'Play Now on Roblox', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps }, // Updated button text and link
+  secondaryBtn: { children: 'Watch Trailer', href: 'YOUR_GAME_TRAILER_LINK_HERE' }, // New button for trailer
   features: [
     {
-      icon: 'tabler-accessible',
-      title: 'WCAG Compliant',
-      content: 'Ensure accessibility with WCAG compliant design for browsing.'
+      icon: leafSvg, // Custom SVG
+      title: 'Diverse Biomes',
+      content: 'Explore unique environments, each with its own special plants.'
     },
     {
-      icon: 'tabler-brand-google',
-      title: 'SEO Friendly',
-      content: 'Boost visibility with SEO-friendly features for better search rankings.'
+      icon: wateringCanSvg, // Custom SVG
+      title: 'Farming Mechanics',
+      content: 'Master advanced farming techniques for maximum yield.'
     },
     {
-      icon: 'tabler-stack-2',
-      title: 'MUI Components',
-      content: 'Customize Material 3 design MUI components for enhanced aesthetics.'
+      icon: plantPotSvg, // Custom SVG
+      title: 'Customization Options',
+      content: 'Personalize your garden and avatar with endless choices.'
     },
     {
-      icon: 'tabler-rocket',
-      title: 'High Performance UI',
-      content: 'Adjust content layout for visual coherence on various screen sizes.'
+      icon: friendSvg, // Custom SVG
+      title: 'Multiplayer Fun',
+      content: 'Play with friends, trade items, and visit their gardens.'
     },
     {
-      icon: 'tabler-help',
-      title: 'Detailed Documentation',
-      content: 'Access comprehensive documentation for easy guidance on platform usage.'
+      icon: achievementSvg, // Custom SVG
+      title: 'Challenging Quests',
+      content: 'Embark on quests to unlock rare items and achievements.'
     },
     {
-      icon: 'tabler-refresh',
+      icon: starRatingSvg, // Custom SVG
       title: 'Regular Updates',
-      content: 'Receive consistent updates to keep the platform secure and up-to-date with the latest features.'
+      content: 'Enjoy fresh content, new plants, and exciting events.'
     }
   ]
 };
 
+// --- feature21 ---
 export const feature21 = {
-  heading: `Design Faster, Smarter with ${branding.brandName} Figma`,
-  caption: 'Unlock Figma’s advanced tools for streamlined, scalable, and responsive SaaS UI design.',
-  image: '/assets/images/graphics/ai/desktop1-light.svg',
-  primaryBtn: { children: 'Free Figma', href: 'https://www.figma.com/community/file/1425095061180549847', ...linkProps },
+  heading: `Design Your Perfect Garden with In-Game Tools`,
+  caption: 'Unlock creative tools for streamlined, scalable, and beautiful garden design within the game.',
+  image: 'YOUR_IN_GAME_SCREENSHOT_1.png', // Placeholder for in-game screenshot
+  primaryBtn: { children: 'Start Designing Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps }, // Link to game
   secondaryBtn: {
-    children: 'Preview Pro Figma',
-    href: 'https://www.figma.com/design/mlkXfeqxUKqIo0GQhPBqPb/SaasAble---UI-Kit---Preview-only?node-id=11-1833&t=JBHOIIEuYZpmN6v8-1',
+    children: 'View Community Creations',
+    href: 'YOUR_COMMUNITY_GALLERY_LINK_HERE', // Link to a community showcase (e.g., a forum thread, a specific Roblox group page)
     ...linkProps
   },
   features: [
     {
       animationDelay: 0.1,
-      icon: 'tabler-components',
-      title: 'Component Architecture'
+      icon: plantPotSvg, // Custom SVG
+      title: 'Modular Garden Layouts'
     },
     {
       animationDelay: 0.2,
-      icon: 'tabler-moon',
-      title: 'Dark Mode'
+      icon: leafSvg, // Custom SVG
+      title: 'Seasonal Themes'
     },
     {
       animationDelay: 0.3,
-      icon: 'tabler-brightness-auto',
-      title: 'Auto Layout'
+      icon: shovelSvg, // Custom SVG
+      title: 'Quick Terraforming'
     },
     {
       animationDelay: 0.4,
-      icon: 'tabler-accessible',
-      title: 'WCAG Compliant'
+      icon: friendSvg, // Custom SVG
+      title: 'Social Sharing'
     },
     {
       animationDelay: 0.1,
-      icon: 'tabler-icons',
-      title: 'Custom Icons'
+      icon: wateringCanSvg, // Custom SVG
+      title: 'Automated Systems'
     },
     {
       animationDelay: 0.2,
-      icon: 'tabler-file-stack',
-      title: 'Page Demos'
+      icon: starRatingSvg, // Custom SVG
+      title: 'Player Ratings'
     },
     {
       animationDelay: 0.3,
-      icon: 'tabler-brand-matrix',
-      title: 'Material 3 Guideline'
+      icon: trophySvg, // Custom SVG
+      title: 'Design Contests'
     },
     {
       animationDelay: 0.4,
-      icon: 'tabler-click',
-      title: 'Quick Customization'
+      icon: achievementSvg, // Custom SVG
+      title: 'Achievement Unlocks'
     }
   ]
 };
 
-export const feature = {
-  heading: `What’s Inside of ${branding.brandName} Plus Version`,
+// --- feature --- (renamed to avoid conflict if you keep original 'feature' component)
+export const gameContentFeatures = { // Renamed for clarity
+  heading: `What Makes "Grow A Garden Map Game" Special`,
   features: [
     {
-      image: '/assets/images/shared/react.svg',
-      title: 'CRA JavaScript',
-      content: 'Ensure accessibility with WCAG compliant design for browsing.'
+      image: leafSvg, // Custom SVG
+      title: 'Vast Plant Library',
+      content: 'Explore hundreds of unique plants with diverse growth patterns.'
     },
     {
-      image: '/assets/images/shared/next-js.svg',
-      title: 'Next.js JavaScript',
-      content: 'Tailor typography for optimal readability across all screen sizes.'
+      image: wateringCanSvg, // Custom SVG
+      title: 'Intuitive Controls',
+      content: 'Easy-to-learn mechanics for all ages of Roblox players.'
     },
     {
-      image: '/assets/images/shared/react.svg',
-      title: 'CRA TypeScript',
-      content: 'Customize Material 3 design MUI components for enhanced aesthetics.'
+      image: shovelSvg, // Custom SVG
+      title: 'Creative Freedom',
+      content: 'Design your garden exactly how you envision it.'
     },
     {
-      image: '/assets/images/shared/next-js.svg',
-      title: 'Next.js TypeScript',
-      content: 'Adjust content layout for visual coherence on various screen sizes.'
+      image: friendSvg, // Custom SVG
+      title: 'Engaging Community',
+      content: 'Connect with fellow gardeners, trade items, and share designs.'
     },
     {
-      image: '/assets/images/shared/figma.svg',
-      title: 'Figma ',
-      content: 'Boost visibility with SEO-friendly features for better search rankings.'
+      image: trophySvg, // Custom SVG
+      title: 'Competitive Events',
+      content: 'Participate in leaderboards and earn exclusive rewards.'
     },
     {
-      title: 'Check Out Our Pricing Plan',
-      content: 'Choose the plan that aligns with your SaaS product requirements.',
-      actionBtn: { children: 'Pricing Plan', href: BUY_NOW_URL, ...linkProps }
+      title: 'Ready to Play?',
+      content: 'Jump into the world of "Grow A Garden Map Game" today!',
+      actionBtn: { children: 'Play Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps } // Link to game
     }
   ]
 };
 
+// --- feature7 ---
 export const feature7 = {
-  heading: 'Real-Time Performance Insights',
-  caption: 'Gain a competitive edge with real-time performance monitoring.',
+  heading: 'Real-Time Garden Monitoring',
+  caption: 'Stay updated on your garden’s growth, progress, and community interactions.',
   testimonials: [
     {
-      image: '/assets/images/graphics/ai/graphics6-light.svg',
+      image: 'YOUR_GAME_SCREENSHOT_PROGRESS_1.png', // Placeholder for game screenshot
       features: [
         {
-          icon: 'tabler-star',
-          title: 'Core Value',
-          content: 'Unlock growth potential through continuous monitoring, enabling proactive strategies in a competitive landscape.'
+          icon: leafSvg, // Custom SVG
+          title: 'Growth Stages',
+          content: 'Track the real-time growth of your plants from seed to harvest.'
         }
       ]
     },
     {
-      image: '/assets/images/graphics/ai/graphics8-light.svg',
+      image: 'YOUR_GAME_SCREENSHOT_PROGRESS_2.png', // Placeholder for game screenshot
       features: [
         {
-          icon: 'tabler-route',
-          title: 'Multi-Cloud Orchestration',
-          content: 'Enhances flexibility and resilience in a multi-cloud environment.'
+          icon: friendSvg, // Custom SVG
+          title: 'Social Interactions',
+          content: 'See when friends visit your garden or send you gifts.'
         }
       ]
     },
     {
-      image: '/assets/images/graphics/ai/graphics3-light.svg',
+      image: 'YOUR_GAME_SCREENSHOT_PROGRESS_3.png', // Placeholder for game screenshot
       features: [
         {
-          icon: 'tabler-history',
-          title: 'Story',
-          content: 'Real-time performance insights empower teams to respond swiftly, optimizing operations and driving growth.'
+          icon: achievementSvg, // Custom SVG
+          title: 'Achievement Progress',
+          content: 'Monitor your progress towards unlocking new achievements and items.'
         }
       ]
     }
   ],
-  breadcrumbs: [{ title: 'Core Value' }, { title: 'Culture' }, { title: 'Story' }]
+  breadcrumbs: [{ title: 'My Garden' }, { title: 'Friends' }, { title: 'Achievements' }] // Adjusted for game context
 };
 
+// --- feature23 ---
 export const feature23 = {
-  heading: 'Culture of Innovation',
+  heading: 'Join Our Growing Community',
   caption:
-    'Join a team that embraces forward-thinking ideas, fosters innovation, and cultivates an environment where your creativity can flourish.',
-  heading2: 'Growth',
-  caption2: 'Our culture prioritizes continuous learning, encouraging personal and professional development. ',
-  image: '/assets/images/graphics/default/feature23-light.png',
-  primaryBtn: { children: 'Join  Our Team', href: '#' },
+    'Become part of a friendly community that shares gardening tips, hosts events, and helps each other grow their dream gardens.',
+  heading2: 'Community Engagement',
+  caption2: 'Our community prioritizes collaboration, encouraging sharing and joint projects. ',
+  image: 'YOUR_COMMUNITY_GRAPHIC.png', // Placeholder for a community graphic/screenshot
+  primaryBtn: { children: 'Join Our Discord', href: 'YOUR_DISCORD_INVITE_LINK_HERE' }, // Link to Discord server
 
   features: [
     {
-      icon: 'tabler-users',
-      title: 'Teamwork',
-      content: 'We embrace varied perspectives and backgrounds, creating an inclusive environment.'
+      icon: friendSvg, // Custom SVG
+      title: 'Friendly Players',
+      content: 'Connect with a supportive and welcoming player base.'
     },
     {
-      icon: 'tabler-star',
-      title: 'Inclusivity',
-      content: 'We embrace varied perspectives and backgrounds, creating an inclusive environment.'
+      icon: starRatingSvg, // Custom SVG
+      title: 'Player-Led Events',
+      content: 'Participate in events organized by the community itself.'
     }
   ]
 };
 
+// --- feature18 ---
 export const feature18 = {
-  heading: 'Powerful Admin Interface',
-  caption: 'Manage data, users, and workflows effortlessly with intuitive, customizable admin controls and features.',
+  heading: 'Dive Deep into Gameplay',
+  caption: 'Explore core mechanics, game features, and what makes "Grow A Garden Map Game" so engaging.',
   topics: [
     {
-      icon: 'tabler-sparkles',
-      title: 'Material UI Powered',
-      title2: 'Leverage Power of Material UI Components',
-      description: 'The power and flexibility of Material UI components in admin template',
-      image: '/assets/images/graphics/default/admin-dashboard.png',
+      icon: leafSvg, // Custom SVG
+      title: 'Planting & Harvesting',
+      title2: 'The Core Gardening Loop',
+      description: 'Learn the basics of planting seeds, nurturing plants, and harvesting your crops.',
+      image: 'YOUR_PLANTING_SCREENSHOT.png', // Placeholder for game screenshot
       list: [
-        { primary: 'Next.js JavaScript/TypeScript' },
-        { primary: 'Customizable Themes' },
-        { primary: 'Rich Form and Table Components' },
-        { primary: 'Responsive Grid System' }
+        { primary: 'Diverse Seed Types' },
+        { primary: 'Optimal Growth Conditions' },
+        { primary: 'Automated Harvest Systems' },
+        { primary: 'Rare Plant Discoveries' }
       ],
-      actionBtn: { children: 'View Dashboard', href: ADMIN_PATH, ...linkProps },
-      actionBtn2: { children: 'Docs', href: DOCS_URL, ...linkProps }
+      actionBtn: { children: 'Start Gardening', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps }, // Link to game
+      actionBtn2: { children: 'Game Guide', href: 'YOUR_GAME_GUIDE_LINK_HERE', ...linkProps } // Link to an in-game guide or wiki
     },
     {
-      icon: 'tabler-palette',
-      title: 'Customizable Themes',
-      title2: 'Flexible Theming Options',
-      description: 'Tailor themes effortlessly with MUI 7 robust theming system.',
-      image: '/assets/images/graphics/default/admin-dashboard-2.png',
+      icon: plantPotSvg, // Custom SVG
+      title: 'Garden Customization',
+      title2: 'Design Your Unique Space',
+      description: 'Personalize your plot with decorations, structures, and unique layouts.',
+      image: 'YOUR_CUSTOMIZATION_SCREENSHOT.png', // Placeholder for game screenshot
       list: [
-        { primary: 'Easy options for Theming' },
-        { primary: 'Layout Options' },
-        { primary: 'Color Presets tailored to your Web Apps' },
-        { primary: 'Consistency in Design' }
+        { primary: 'Hundreds of Decor Items' },
+        { primary: 'Expandable Plot Sizes' },
+        { primary: 'Themed Garden Kits' },
+        { primary: 'Shareable Designs' }
       ],
-      actionBtn: { children: 'View Dashboard', href: ADMIN_PATH, ...linkProps },
-      actionBtn2: { children: 'Docs', href: DOCS_URL, ...linkProps }
+      actionBtn: { children: 'Design Your Garden', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps }, // Link to game
+      actionBtn2: { children: 'Design Tips', href: 'YOUR_DESIGN_TIPS_LINK_HERE', ...linkProps } // Link to design tips/blog post
     },
     {
-      icon: 'tabler-rocket',
-      title: 'Faster Development',
-      title2: 'Rapid Development',
-      description: 'Launch projects quicker with pre-built layouts and components.',
-      image: '/assets/images/graphics/default/admin-dashboard-3.png',
+      icon: friendSvg, // Custom SVG
+      title: 'Social Features',
+      title2: 'Connect & Collaborate',
+      description: 'Interact with other players, trade items, and visit their gardens.',
+      image: 'YOUR_SOCIAL_SCREENSHOT.png', // Placeholder for game screenshot
       list: [
-        { primary: 'Time Saving' },
-        { primary: 'Tested and Reliable' },
-        { primary: 'Customization Ready' },
-        { primary: 'Enhanced User Experience' }
+        { primary: 'In-Game Chat' },
+        { primary: 'Player Trading System' },
+        { primary: 'Friend Visits' },
+        { primary: 'Community Events' }
       ],
-      actionBtn: { children: 'View Dashboard', href: ADMIN_PATH, ...linkProps },
-      actionBtn2: { children: 'Docs', href: DOCS_URL, ...linkProps }
+      actionBtn: { children: 'Find Friends', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps }, // Link to game
+      actionBtn2: { children: 'Join Discord', href: 'YOUR_DISCORD_INVITE_LINK_HERE', ...linkProps } // Link to Discord
     },
     {
-      icon: 'tabler-scale',
-      title: 'Scalability',
-      title2: 'Build to Scale',
-      description: 'Easily scale your app with flexible, modular, and extensible templates.',
-      image: '/assets/images/graphics/default/admin-dashboard.png',
+      icon: trophySvg, // Custom SVG
+      title: 'Achievements & Ranks',
+      title2: 'Prove Your Gardening Prowess',
+      description: 'Earn achievements, climb leaderboards, and become a master gardener.',
+      image: 'YOUR_ACHIEVEMENT_SCREENSHOT.png', // Placeholder for game screenshot
       list: [
-        { primary: 'Modular Architecture' },
-        { primary: 'Performance Optimized' },
-        { primary: 'Extensible Codebase' },
-        { primary: 'Future Proof Design' }
+        { primary: 'Daily & Weekly Challenges' },
+        { primary: 'Exclusive Badges & Titles' },
+        { primary: 'Leaderboard Competitions' },
+        { primary: 'Seasonal Rewards' }
       ],
-      actionBtn: { children: 'View Dashboard', href: ADMIN_PATH, ...linkProps },
-      actionBtn2: { children: 'Docs', href: DOCS_URL, ...linkProps }
+      actionBtn: { children: 'View Leaderboards', href: 'YOUR_GAME_LEADERBOARD_LINK_HERE', ...linkProps }, // Link to game leaderboard
+      actionBtn2: { children: 'See Achievements', href: 'YOUR_GAME_ACHIEVEMENT_LINK_HERE', ...linkProps } // Link to in-game achievements list
     }
   ]
 };
