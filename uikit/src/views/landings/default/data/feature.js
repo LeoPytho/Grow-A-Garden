@@ -1,8 +1,9 @@
 // @project
 // import branding from '@/branding.json'; // Uncomment if branding.brandName is used elsewhere
 import { IconType } from '@/enum'; // Ensure IconType is defined and includes CUSTOM_SVG
-// Import paths that are actually used, others are removed to clear ESLint warnings
-import { SECTION_PATH, BUY_NOW_URL, ADMIN_PATH, DOCS_URL } from '@/path'; // Keep if these paths are still relevant or replace as needed
+
+// Removed unused imports like SECTION_PATH, BUY_NOW_URL, ADMIN_PATH, DOCS_URL
+// as they are no longer explicitly used in the data objects below.
 
 const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
 
@@ -241,7 +242,7 @@ export const feature21 = {
 };
 
 // --- feature ---
-export const feature = { // This name is now preserved
+export const feature = {
   heading: `What Makes "Grow A Garden Map Game" Special`,
   features: [
     {
