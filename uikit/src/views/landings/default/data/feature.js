@@ -123,7 +123,7 @@ export const feature20 = {
   secondaryBtn: { children: 'Watch Trailer', href: 'YOUR_GAME_TRAILER_LINK_HERE' },
   features: [
     {
-      icon: { name: 'tabler-leaf' },
+      icon: { name: 'lucide-leaf' },
       title: 'Diverse Biomes',
       content: 'Explore unique environments, each with its own special plants.'
     },
