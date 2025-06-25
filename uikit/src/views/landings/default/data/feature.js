@@ -1,5 +1,3 @@
-import { IconType } from '@/enum'; // Ensure IconType is defined and includes CUSTOM_SVG
-
 // Import Tabler Icons
 import {
   IconPlant2,
@@ -52,11 +50,11 @@ export const hero = {
   videoSrc: 'YOUR_GAME_TRAILER_VIDEO_LINK_HERE', // **Important: Replace with actual game trailer video link**
   videoThumbnail: 'YOUR_GAME_TRAILER_THUMBNAIL_HERE', // **Important: Replace with actual game trailer thumbnail link**
   listData: [
-    { icon: IconSeed, title: 'Plant & Harvest' }, // Changed to use icon component directly
-    { icon: IconPlant, title: 'Rare Plants' },
-    { icon: IconMap, title: 'Explore Biomes' },
-    { icon: IconUsersGroup, title: 'Active Community' }, // Using a more specific community icon
-    { icon: IconSeed, title: 'Regular Updates' },
+    { icon: 'tabler-seed', title: 'Plant & Harvest' }, // Changed to use string for icon
+    { icon: 'tabler-plant', title: 'Rare Plants' },
+    { icon: 'tabler-map', title: 'Explore Biomes' },
+    { icon: 'tabler-users-group', title: 'Active Community' }, // Using a more specific community icon
+    { icon: 'tabler-seed', title: 'Regular Updates' },
   ]
 };
 
@@ -67,17 +65,17 @@ export const feature2 = {
     'Join a vibrant community of gardeners, grow unique plants, and design your perfect plot in our ever-expanding world.',
   features: [
     {
-      icon: { component: IconLeaf, type: IconType.CUSTOM_SVG, color: 'success.main', stroke: 1 }, // Changed to 'component'
+      icon: { name: 'tabler-leaf', color: 'success.main', stroke: 1 }, // Changed to 'name'
       title: 'Unique Plants',
       content: 'Discover and grow hundreds of rare and exotic plant species.'
     },
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG, color: 'primary.main', stroke: 1 },
+      icon: { name: 'tabler-users', color: 'primary.main', stroke: 1 },
       title: 'Community Events',
       content: 'Participate in fun events and contests with fellow gardeners.'
     },
     {
-      icon: { component: IconTrophy, type: IconType.CUSTOM_SVG, color: 'warning.main', stroke: 1 },
+      icon: { name: 'tabler-trophy', color: 'warning.main', stroke: 1 },
       title: 'Seasonal Challenges',
       content: 'Test your skills in seasonal challenges to earn exclusive rewards.'
     }
@@ -92,24 +90,24 @@ export const feature5 = {
   image2: '/assets/images/graphics/game/graphics2-light.svg',
   features: [
     {
-      icon: { component: IconWateringCan, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-watering-can' },
       title: 'Automatic Watering',
       content: 'Automate your garden care with smart watering systems.'
     },
     {
-      icon: { component: IconPlantPot, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-plant-pot' },
       title: 'Customizable Plots',
       content: 'Design and decorate your garden plots with a variety of items.'
     }
   ],
   features2: [
     {
-      icon: { component: IconShovel, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-shovel' },
       title: 'Resource Gathering',
       content: 'Explore the map to find rare seeds and crafting materials.'
     },
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Social Hubs',
       content: 'Connect with friends and trade items in dedicated social zones.'
     }
@@ -136,32 +134,32 @@ export const feature20 = {
   secondaryBtn: { children: 'Watch Trailer', href: 'YOUR_GAME_TRAILER_LINK_HERE' },
   features: [
     {
-      icon: { component: IconLeaf, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-leaf' },
       title: 'Diverse Biomes',
       content: 'Explore unique environments, each with its own special plants.'
     },
     {
-      icon: { component: IconWateringCan, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-watering-can' },
       title: 'Farming Mechanics',
       content: 'Master advanced farming techniques for maximum yield.'
     },
     {
-      icon: { component: IconPlantPot, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-plant-pot' },
       title: 'Customization Options',
       content: 'Personalize your garden and avatar with endless choices.'
     },
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Multiplayer Fun',
       content: 'Play with friends, trade items, and visit their gardens.'
     },
     {
-      icon: { component: IconAward, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-award' },
       title: 'Challenging Quests',
       content: 'Embark on quests to unlock rare items and achievements.'
     },
     {
-      icon: { component: IconStarFilled, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-star-filled' },
       title: 'Regular Updates',
       content: 'Enjoy fresh content, new plants, and exciting events.'
     }
@@ -182,42 +180,42 @@ export const feature21 = {
   features: [
     {
       animationDelay: 0.1,
-      icon: { component: IconPlantPot, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-plant-pot' },
       title: 'Modular Garden Layouts'
     },
     {
       animationDelay: 0.2,
-      icon: { component: IconLeaf, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-leaf' },
       title: 'Seasonal Themes'
     },
     {
       animationDelay: 0.3,
-      icon: { component: IconShovel, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-shovel' },
       title: 'Quick Terraforming'
     },
     {
       animationDelay: 0.4,
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Social Sharing'
     },
     {
       animationDelay: 0.1,
-      icon: { component: IconWateringCan, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-watering-can' },
       title: 'Automated Systems'
     },
     {
       animationDelay: 0.2,
-      icon: { component: IconStarFilled, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-star-filled' },
       title: 'Player Ratings'
     },
     {
       animationDelay: 0.3,
-      icon: { component: IconTrophy, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-trophy' },
       title: 'Design Contests'
     },
     {
       animationDelay: 0.4,
-      icon: { component: IconAward, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-award' },
       title: 'Achievement Unlocks'
     }
   ]
@@ -228,31 +226,27 @@ export const feature = {
   heading: `What Makes "Grow A Garden Map Game" Special`,
   features: [
     {
-      // For cases where 'image' property was used directly for SVG, we'll need to
-      // either update the component using this data to render a Tabler Icon,
-      // or define a placeholder image if a visual asset is truly needed.
-      // For now, I'm assuming 'image' should also become an icon component.
-      icon: { component: IconLeaf, type: IconType.CUSTOM_SVG }, // Assuming this will be rendered as an icon
+      icon: { name: 'tabler-leaf' }, // Assuming this will be rendered as an icon
       title: 'Vast Plant Library',
       content: 'Explore hundreds of unique plants with diverse growth patterns.'
     },
     {
-      icon: { component: IconWateringCan, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-watering-can' },
       title: 'Intuitive Controls',
       content: 'Easy-to-learn mechanics for all ages of Roblox players.'
     },
     {
-      icon: { component: IconShovel, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-shovel' },
       title: 'Creative Freedom',
       content: 'Design your garden exactly how you envision it.'
     },
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Engaging Community',
       content: 'Connect with fellow gardeners, trade items, and share designs.'
     },
     {
-      icon: { component: IconTrophy, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-trophy' },
       title: 'Competitive Events',
       content: 'Participate in leaderboards and earn exclusive rewards.'
     },
@@ -273,7 +267,7 @@ export const feature7 = {
       image: '/assets/images/graphics/game/graphics6-light.svg',
       features: [
         {
-          icon: { component: IconLeaf, type: IconType.CUSTOM_SVG },
+          icon: { name: 'tabler-leaf' },
           title: 'Growth Stages',
           content: 'Track the real-time growth of your plants from seed to harvest.'
         }
@@ -283,7 +277,7 @@ export const feature7 = {
       image: '/assets/images/graphics/game/graphics8-light.svg',
       features: [
         {
-          icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+          icon: { name: 'tabler-users' },
           title: 'Social Interactions',
           content: 'See when friends visit your garden or send you gifts.'
         }
@@ -293,7 +287,7 @@ export const feature7 = {
       image: '/assets/images/graphics/game/graphics3-light.svg',
       features: [
         {
-          icon: { component: IconAward, type: IconType.CUSTOM_SVG },
+          icon: { name: 'tabler-award' },
           title: 'Achievement Progress',
           content: 'Monitor your progress towards unlocking new achievements and items.'
         }
@@ -315,12 +309,12 @@ export const feature23 = {
 
   features: [
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Friendly Players',
       content: 'Connect with a supportive and welcoming player base.'
     },
     {
-      icon: { component: IconStarFilled, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-star-filled' },
       title: 'Player-Led Events',
       content: 'Participate in events organized by the community itself.'
     }
@@ -333,7 +327,7 @@ export const feature18 = {
   caption: 'Explore core mechanics, game features, and what makes "Grow A Garden Map Game" so engaging.',
   topics: [
     {
-      icon: { component: IconLeaf, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-leaf' },
       title: 'Planting & Harvesting',
       title2: 'The Core Gardening Loop',
       description: 'Learn the basics of planting seeds, nurturing plants, and harvesting your crops.',
@@ -348,7 +342,7 @@ export const feature18 = {
       actionBtn2: { children: 'Game Guide', href: 'YOUR_GAME_GUIDE_LINK_HERE', ...linkProps }
     },
     {
-      icon: { component: IconPlantPot, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-plant-pot' },
       title: 'Garden Customization',
       title2: 'Design Your Unique Space',
       description: 'Personalize your plot with decorations, structures, and unique layouts.',
@@ -363,7 +357,7 @@ export const feature18 = {
       actionBtn2: { children: 'Design Tips', href: 'YOUR_DESIGN_TIPS_LINK_HERE', ...linkProps }
     },
     {
-      icon: { component: IconUsers, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-users' },
       title: 'Social Features',
       title2: 'Connect & Collaborate',
       description: 'Interact with other players, trade items, and visit their gardens.',
@@ -378,7 +372,7 @@ export const feature18 = {
       actionBtn2: { children: 'Join Discord', href: 'YOUR_DISCORD_INVITE_LINK_HERE', ...linkProps }
     },
     {
-      icon: { component: IconTrophy, type: IconType.CUSTOM_SVG },
+      icon: { name: 'tabler-trophy' },
       title: 'Achievements & Ranks',
       title2: 'Prove Your Gardening Prowess',
       description: 'Earn achievements, climb leaderboards, and become a master gardener.',
