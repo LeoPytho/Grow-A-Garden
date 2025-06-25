@@ -22,7 +22,7 @@ export let IconType;
   IconType['STROKE'] = 'stroke';
   IconType['FILL'] = 'fill';
   IconType['CUSTOM'] = 'custom';
-  IconType['CUSTOM_SVG'] = 'custom_svg';
+  IconType['CUSTOM_SVG'] = 'CUSTOM_SVG';
 })(IconType || (IconType = {}));
 
 //@navbar.js
