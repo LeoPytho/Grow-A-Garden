@@ -71,7 +71,7 @@ const sectionsData = [
 export default function Navbar() {
   return (
     <>
-      <SectionHero {...{ heading: `${branding.brandName} Navbar Section`, breadcrumbs }} />
+      <SectionHero {...{ heading: `GrowAGarden Navbar Section`, breadcrumbs }} />
       <ContainerWrapper>
         <Stack sx={{ gap: { xs: 3, sm: 4, md: 5 }, my: 6 }}>
           {sectionsData.map((item, index) => (
