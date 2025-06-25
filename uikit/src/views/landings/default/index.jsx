@@ -57,6 +57,7 @@ export default function Main() {
       <LazySection
         sections={[
           // Testimonials can be useful if you have positive player feedback
+          { importFunc: () => import('@/blocks/cta').then((module) => ({ default: module.Cta5 })), props: cta5 },
           { importFunc: () => import('@/blocks/faq').then((module) => ({ default: module.Faq6 })), props: faq }
         ]}
         offset="200px"
