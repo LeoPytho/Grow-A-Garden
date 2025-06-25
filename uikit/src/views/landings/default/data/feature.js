@@ -21,7 +21,6 @@ const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
 
 // --- hero ---
 // @mui
-import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 
