@@ -44,8 +44,7 @@ export default function Main() {
       <LazySection
         sections={[
           { importFunc: () => import('@/blocks/feature').then((module) => ({ default: module.Feature18 })), props: feature18 },
-          { importFunc: () => import('@/blocks/feature').then((module) => ({ default: module.Feature21 })), props: feature21 },
-          { importFunc: () => import('@/blocks/cta').then((module) => ({ default: module.Cta4 })), props: cta4 }
+          { importFunc: () => import('@/blocks/feature').then((module) => ({ default: module.Feature21 })), props: feature21 }
         ]}
         offset="200px"
       />
@@ -58,9 +57,6 @@ export default function Main() {
       <LazySection
         sections={[
           // Testimonials can be useful if you have positive player feedback
-          { importFunc: () => import('@/blocks/testimonial').then((module) => ({ default: module.Testimonial10 })), props: testimonial },
-          { importFunc: () => import('@/blocks/cta').then((module) => ({ default: module.Cta5 })), props: cta5 },
-          // FAQ is great for answering common player questions
           { importFunc: () => import('@/blocks/faq').then((module) => ({ default: module.Faq6 })), props: faq }
         ]}
         offset="200px"
