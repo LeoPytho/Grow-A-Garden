@@ -16,6 +16,14 @@ const createSvgDataUri = (svgContent) => {
 };
 
 // Custom SVGs for the game
+const sproutSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 20c-2-.9-4-2.5-4-5 0-2.5 2-4 4-5l1-1a4 4 0 0 1 6 0l1 1c2 .9 4 2.5 4 5 0 2.5-2 4-4 5z"/>
+    <path d="M12 10a4 4 0 0 0-4-4"/>
+    <path d="M16 10a4 4 0 0 1 4 4"/>
+  </svg>
+`);
+
 const leafSvg = createSvgDataUri(`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 20.3 8.6 22 14c-1.4 2.4-4.9 5.7-8.2 4.7l-4.9 1.9c-2.7 1.1-5.5-.3-6.6-3A4.995 4.005 0 0 1 11 20z"/>
@@ -78,6 +86,92 @@ const achievementSvg = createSvgDataUri(`
   </svg>
 `);
 
+const seedSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2c-.5 0-1 .2-1.4.6L4.6 7.6c-.8.8-.8 2 0 2.8L10 15.8c.8.8 2 .8 2.8 0l5.4-5.4c.8-.8.8-2 0-2.8L13.4 2.6C13 .2 12.5 0 12 0z"/>
+    <path d="M17 17c-2 2-4.5 3-7 3s-5-1-7-3"/>
+  </svg>
+`);
+
+const plantSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+    <path d="M12 8v8"/>
+    <path d="M8 12h8"/>
+    <path d="M10 14l4 4"/>
+    <path d="M14 10l-4-4"/>
+  </svg>
+`);
+
+const mapSvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+    <line x1="8" y1="2" x2="8" y2="18"></line>
+    <line x1="16" y1="6" x2="16" y2="22"></line>
+  </svg>
+`);
+
+const communitySvg = createSvgDataUri(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="12" y1="12" x2="12" y2="16"></line>
+    <line x1="8" y1="12" x2="8" y2="16"></line>
+    <line x1="16" y1="12" x2="16" y2="16"></line>
+  </svg>
+`);
+
+
+// --- hero ---
+// @mui
+import CardMedia from '@mui/material/CardMedia';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
+// No need for SECTION_PATH if replaced by direct game link
+// import { SECTION_PATH } from '@/path';
+
+export const hero = {
+  chip: {
+    label: (
+      <>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          Start your virtual
+        </Typography>
+        <Chip
+          label={
+            <Typography variant="caption" sx={{ color: 'primary.main' }}>
+              Garden Adventure
+            </Typography>
+          }
+          sx={{ height: 24, bgcolor: 'primary.lighter', mr: -1, ml: 0.75, '& .MuiChip-label': { px: 1.25 } }}
+          icon={
+            <CardMedia
+              component="img"
+              image={sproutSvg} // Using the custom SVG data URI
+              sx={{ width: 16, height: 16 }}
+              alt="sprout icon"
+              loading="lazy"
+            />
+          }
+        />
+      </>
+    )
+  },
+  headLine: 'Grow A Garden Map Game on Roblox',
+  captionLine: 'Cultivate your dream garden, explore unique biomes, and socialize with friends in this immersive Roblox experience!',
+  primaryBtn: { children: 'Play Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE' }, // **Important: Replace with actual Roblox game link**
+  videoSrc: 'YOUR_GAME_TRAILER_VIDEO_LINK_HERE', // **Important: Replace with actual game trailer video link**
+  videoThumbnail: 'YOUR_GAME_TRAILER_THUMBNAIL_HERE', // **Important: Replace with actual game trailer thumbnail link**
+  listData: [
+    { image: seedSvg, title: 'Plant & Harvest' },
+    { image: plantSvg, title: 'Rare Plants' },
+    { image: mapSvg, title: 'Explore Biomes' },
+    { image: communitySvg, title: 'Active Community' },
+    { image: seedSvg, title: 'Regular Updates' }, // Reusing seedSvg, you can create a new one if preferred
+  ]
+};
+
+
 // --- feature2 ---
 export const feature2 = {
   heading: 'Cultivate Your Dream Garden',
@@ -106,8 +200,8 @@ export const feature2 = {
 export const feature5 = {
   heading: 'Beyond Just Planting',
   caption: 'Our game offers a rich experience, ensuring endless fun and interaction.',
-  image1: '/assets/images/graphics/game/game-graphic1-light.svg', // Placeholder for game-specific graphic
-  image2: '/assets/images/graphics/game/game-graphic2-light.svg', // Placeholder for game-specific graphic
+  image1: '/assets/images/graphics/game/graphics3-light.svg', // Placeholder for game-specific graphic
+  image2: '/assets/images/graphics/game/graphics2-light.svg', // Placeholder for game-specific graphic
   features: [
     {
       icon: { name: wateringCanSvg, type: IconType.CUSTOM_SVG },
@@ -190,7 +284,7 @@ export const feature20 = {
 export const feature21 = {
   heading: `Design Your Perfect Garden with In-Game Tools`,
   caption: 'Unlock creative tools for streamlined, scalable, and beautiful garden design within the game.',
-  image: '/assets/images/graphics/game/in-game-screenshot1-light.svg', // Placeholder for in-game screenshot
+  image: '/assets/images/graphics/game/desktop1-light.svg', // Placeholder for in-game screenshot
   primaryBtn: { children: 'Start Designing Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps },
   secondaryBtn: {
     children: 'View Community Creations',
@@ -284,7 +378,7 @@ export const feature7 = {
   caption: 'Stay updated on your garden’s growth, progress, and community interactions.',
   testimonials: [
     {
-      image: '/assets/images/graphics/game/game-progress-screenshot1-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/graphics6-light.svg', // Placeholder for game screenshot
       features: [
         {
           icon: { name: leafSvg, type: IconType.CUSTOM_SVG },
@@ -294,7 +388,7 @@ export const feature7 = {
       ]
     },
     {
-      image: '/assets/images/graphics/game/game-progress-screenshot2-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/graphics8-light.svg', // Placeholder for game screenshot
       features: [
         {
           icon: { name: friendSvg, type: IconType.CUSTOM_SVG },
@@ -304,7 +398,7 @@ export const feature7 = {
       ]
     },
     {
-      image: '/assets/images/graphics/game/game-progress-screenshot3-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/graphics3-light.svg', // Placeholder for game screenshot
       features: [
         {
           icon: { name: achievementSvg, type: IconType.CUSTOM_SVG },
@@ -324,7 +418,7 @@ export const feature23 = {
     'Become part of a friendly community that shares gardening tips, hosts events, and helps each other grow their dream gardens.',
   heading2: 'Community Engagement',
   caption2: 'Our community prioritizes collaboration, encouraging sharing and joint projects. ',
-  image: '/assets/images/graphics/game/community-graphic-light.svg', // Placeholder for a community graphic/screenshot
+  image: '/assets/images/graphics/game/feature23-light.png', // Placeholder for a community graphic/screenshot
   primaryBtn: { children: 'Join Our Discord', href: 'YOUR_DISCORD_INVITE_LINK_HERE' },
 
   features: [
@@ -351,7 +445,7 @@ export const feature18 = {
       title: 'Planting & Harvesting',
       title2: 'The Core Gardening Loop',
       description: 'Learn the basics of planting seeds, nurturing plants, and harvesting your crops.',
-      image: '/assets/images/graphics/game/planting-screenshot-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/admin-dashboard.png', // Placeholder for game screenshot
       list: [
         { primary: 'Diverse Seed Types' },
         { primary: 'Optimal Growth Conditions' },
@@ -366,7 +460,7 @@ export const feature18 = {
       title: 'Garden Customization',
       title2: 'Design Your Unique Space',
       description: 'Personalize your plot with decorations, structures, and unique layouts.',
-      image: '/assets/images/graphics/game/customization-screenshot-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/admin-dashboard-2.png', // Placeholder for game screenshot
       list: [
         { primary: 'Hundreds of Decor Items' },
         { primary: 'Expandable Plot Sizes' },
@@ -381,7 +475,7 @@ export const feature18 = {
       title: 'Social Features',
       title2: 'Connect & Collaborate',
       description: 'Interact with other players, trade items, and visit their gardens.',
-      image: '/assets/images/graphics/game/social-screenshot-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/admin-dashboard-3.png', // Placeholder for game screenshot
       list: [
         { primary: 'In-Game Chat' },
         { primary: 'Player Trading System' },
@@ -396,7 +490,7 @@ export const feature18 = {
       title: 'Achievements & Ranks',
       title2: 'Prove Your Gardening Prowess',
       description: 'Earn achievements, climb leaderboards, and become a master gardener.',
-      image: '/assets/images/graphics/game/achievement-screenshot-light.svg', // Placeholder for game screenshot
+      image: '/assets/images/graphics/game/admin-dashboard.png', // Placeholder for game screenshot
       list: [
         { primary: 'Daily & Weekly Challenges' },
         { primary: 'Exclusive Badges & Titles' },
