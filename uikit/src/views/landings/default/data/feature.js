@@ -1,19 +1,5 @@
 // Import Tabler Icons
-import {
-  IconPlant2,
-  IconLeaf,
-  IconWateringCan,
-  IconShovel,
-  IconUsers,
-  IconPlantPot,
-  IconStarFilled, // Use filled for a solid star
-  IconTrophy,
-  IconAward,
-  IconSeed,
-  IconPlant,
-  IconMap,
-  IconUsersGroup, // Or IconBuildingCommunity, depending on desired community icon
-} from '@tabler/icons-react';
+
 
 const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
 
