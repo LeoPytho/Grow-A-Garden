@@ -1,4 +1,7 @@
 // Import Tabler Icons
+import {
+  IconPlant2,
+} from '@tabler/icons-react';
 
 
 const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
