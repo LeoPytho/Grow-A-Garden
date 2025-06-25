@@ -43,7 +43,6 @@ export default function Main() {
       */}
       <LazySection
         sections={[
-          { importFunc: () => import('@/blocks/feature').then((module) => ({ default: module.Feature18 })), props: feature18 },
           { importFunc: () => import('@/blocks/feature').then((module) => ({ default: module.Feature21 })), props: feature21 }
         ]}
         offset="200px"
