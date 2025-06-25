@@ -31,44 +31,47 @@ export const cta4 = {
     { primary: 'Timely Support, Guaranteed' },
     { primary: 'Regular Updates Provided' },
     { primary: 'Proven Industry Leader' }
-  ],
-  clientContent: 'Learn More'
+  ]
 };
 
-function DescriptionLine() {
+// --- START OF MODIFIED CTA5 ---
+function GardenDescriptionLine() {
   return (
     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-      Have questions? Our community is here to help. Learn more about{' '}
-      <Link component={NextLink} variant="caption2" color="primary" href={branding.company.socialLink.discord} underline="hover">
-        our community
-      </Link>
+      Don't miss out on important updates and restock alerts for your favorite items in Grow A Garden Stock!
+      {/* Removed the NextLink and branding link as we're going straight to WhatsApp */}
     </Typography>
   );
 }
 
 export const cta5 = {
-  label: 'Join the Community',
-  heading: 'Connect with us on Discord',
-  caption: 'Get support, share insights, and grow together.',
+  label: 'Stay Updated!', // Changed label to be more relevant for a game
+  heading: 'Join Our WhatsApp Channel for Restock Alerts!', // Clear call to action for restocks
+  caption: 'Be the first to know when rare items and new seeds are back in stock.', // Benefit-driven caption
   primaryBtn: {
-    children: 'Join Discord Community',
-    href: branding.company.socialLink.discord,
+    children: 'Join WhatsApp Channel', // Clear button text
+    href: 'https://whatsapp.com/channel/0029Vah3uvQ11ulW8yfEyt28', // Your WhatsApp Channel link
     target: '_blank',
     rel: 'noopener noreferrer'
   },
-  description: <DescriptionLine />,
-  saleData: { count: 8, defaultUnit: 'k+', caption: 'Trusted by professionals worldwide' },
+  description: <GardenDescriptionLine />, // Using the new description component
+  saleData: {
+    count: 1, // Placeholder, you might update this with actual player count or channel members
+    defaultUnit: 'm+', // Changed to k+ to imply a large growing community
+    caption: 'Gardeners already growing their wealth!' // Fun, game-related caption
+  },
   profileGroups: {
     avatarGroups: [
-      { avatar: '/assets/images/user/avatar1.png' },
+      { avatar: '/assets/images/user/avatar1.png' }, // You might want game-themed avatars if available
       { avatar: '/assets/images/user/avatar2.png' },
       { avatar: '/assets/images/user/avatar3.png' },
       { avatar: '/assets/images/user/avatar4.png' },
       { avatar: '/assets/images/user/avatar5.png' }
     ],
-    review: '250k+ Reviews (4.65 out of 5)'
+    review: 'Join thousands of fellow gardeners!' // More engaging text
   }
 };
+// --- END OF MODIFIED CTA5 ---
 
 export const cta10 = {
   heading: "Couldn't find the perfect role for you?",
