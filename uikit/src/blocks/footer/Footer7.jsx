@@ -34,15 +34,8 @@ const data = [
     title: 'Company',
     menu: [
       {
-        label: 'Why Phoenixcoded?',
-        link: {
-          href: 'https://blog.saasable.io/a-decade-of-expertise-the-phoenixcoded-story-and-why-you-should-trust-us',
-          ...linkProps
-        }
-      },
-      {
         label: 'About',
-        link: { href: 'https://saasable.io/about', ...linkProps }
+        link: { href: 'https://www.jkt48connect.my.id/about', ...linkProps }
       },
       {
         label: 'Contact Us',
@@ -56,51 +49,12 @@ const data = [
     title: 'Support',
     menu: [
       {
-        label: 'Pricing',
-        link: { href: '#' }
-      },
-      {
-        label: 'FAQ',
-        link: { href: '#' }
-      },
-      {
         label: 'Support',
-        link: { href: branding.company.socialLink.support, ...linkProps }
+        link: { href: 'https://www.jkt48connect.my.id/donate, ...linkProps }
       },
       {
-        label: 'License Terms',
-        link: { href: 'https://mui.com/store/license/', ...linkProps }
-      },
-      {
-        label: 'Discord',
-        link: { href: branding.company.socialLink.discord, ...linkProps }
-      }
-    ]
-  },
-  {
-    id: 'resources',
-    grid: { size: { xs: 12, sm: 'auto' } },
-    title: 'Resources',
-    menu: [
-      {
-        label: 'Freebies',
-        link: { href: FREEBIES_URL, ...linkProps }
-      },
-      {
-        label: 'Documentation',
-        link: { href: DOCS_URL, ...linkProps }
-      },
-      {
-        label: 'Blog',
-        link: { href: 'https://blog.saasable.io/', ...linkProps }
-      },
-      {
-        label: 'Privacy Policy',
-        link: { href: '/privacy-policy', ...linkProps }
-      },
-      {
-        label: 'Refund Policy',
-        link: { href: 'https://mui.com/store/customer-refund-policy/', ...linkProps }
+        label: 'WhatsApp Channel',
+        link: { href: 'https://whatsapp.com/channel/0029Vah3uvQ11ulW8yfEyt28', ...linkProps }
       }
     ]
   }
