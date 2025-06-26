@@ -14,11 +14,10 @@ export const navbar = {
     ...linkProps,
     sx: { minWidth: 40, width: 40, height: 40, p: 0 }
   },
-  primaryBtn: { children: 'Buy Now', href: BUY_NOW_URL, ...linkProps },
+  primaryBtn: { children: 'Join Now', href: 'https://whatsapp.com/channel/0029Vah3uvQ11ulW8yfEyt28', ...linkProps },
   navItems: [
     { id: 'home', title: 'Home', link: '/' },
-    { id: 'stock', title: 'Stock', link: SECTION_PATH },
-    { id: 'weather', title: 'Weather', link: ADMIN_PATH, ...linkProps },
-    { id: 'restocktime', title: 'Restock time', link: DOCS_URL, ...linkProps, icon: 'tabler-pin-invoke' }
+    { id: 'stock', title: 'Stock', link: '/stock' },
+    { id: 'weather', title: 'Weather', link: '/weather', ...linkProps }
   ]
 };
