@@ -54,227 +54,240 @@ const filterList = [
   { title: 'Night Stock', value: SectionCategory.NIGHT }
 ];
 
-// Emoji mapping for items
-const emojiMap = {
+// New image mapping
+const itemImageMap: Record<string, string> = {
   // Fruits/Plants
-  'carrot': '🥕',
-  'strawberry': '🍓',
-  'blueberry': '🫐',
-  'orange tulip': '🧡🌷',
-  'tomato': '🍅',
-  'corn': '🌽',
-  'daffodil': '🌼',
-  'watermelon': '🍉',
-  'pumpkin': '🎃',
-  'apple': '🍎',
-  'bamboo': '🎍',
-  'coconut': '🥥',
-  'cactus': '🌵',
-  'dragon fruit': '🐉🍇',
-  'mango': '🥭',
-  'grape': '🍇',
-  'mushroom': '🍄',
-  'pepper': '🌶️',
-  'cacao': '🍫',
-  'lemon': '🍋',
-  'pineapple': '🍍',
-  'peach': '🍑',
-  'pear': '🍐',
-  'papaya': '🥭',
-  'banana': '🍌',
-  'passion fruit': '💜🍈',
-  'soul fruit': '👻🍇',
-  'cursed fruit': '💀🍇',
-  'chocolate carrot': '🍫🥕',
-  'red lollipop': '🍭',
-  'candy sunflower': '🌻🍬',
-  'easter egg': '🥚',
-  'candy blossom': '🌸🍬',
-  'raspberry': '🍓',
-  'cranberry': '🍒',
-  'durian': '🍈',
-  'eggplant': '🍆',
-  'venus fly trap': '🌿',
-  'lotus': '🌸',
-  'glowshroom': '✨🍄',
-  'mint': '🍃',
-  'moonflower': '🌙🌸',
-  'starfruit': '⭐🍇',
-  'moonglow': '🌕✨',
-  'moon blossom': '🌙🌸',
-  'cherry blossom': '🌸🍒',
-  'moon melon': '🌙🍉',
-  'beanstalk': '🌱',
-  'blood banana': '🩸🍌',
-  'moon mango': '🌙🥭',
-  'celestiberry': '🌌🍓',
+  'carrot': 'Carrot.png',
+  'strawberry': 'Strawberry.png',
+  'blueberry': 'Blueberry.png',
+  'orange tulip': 'Orange-Tulip.png',
+  'tomato': 'Tomato.png',
+  'corn': 'Corn.png',
+  'daffodil': 'Daffodil.png',
+  'watermelon': 'Watermelon.png',
+  'pumpkin': 'Pumpkin.png',
+  'apple': 'Apple.png',
+  'bamboo': 'Bamboo.png',
+  'coconut': 'Coconut.png',
+  'cactus': 'Cactus.png',
+  'dragon fruit': 'Dragon-Fruit.png',
+  'mango': 'Mango.png',
+  'grape': 'Grape.png',
+  'mushroom': 'Mushroom.png',
+  'pepper': 'Pepper.png',
+  'cacao': 'Cacao.png',
+  'lemon': 'Lemon.png',
+  'pineapple': 'Pineapple.png',
+  'peach': 'Peach.png',
+  'pear': 'Pear.png',
+  'papaya': 'Papaya.png',
+  'banana': 'Banana.png',
+  'passion fruit': 'Passion-Fruit.png',
+  'soul fruit': 'Soul-Fruit.png',
+  'cursed fruit': 'Cursed-Fruit.png',
+  'chocolate carrot': 'Chocolate-Carrot.png',
+  'red lollipop': 'Red-Lollipop.png',
+  'candy sunflower': 'Candy-Sunflower.png',
+  'easter egg': 'Easter-Egg.png',
+  'candy blossom': 'Candy-Blossom.png',
+  'raspberry': 'Raspberry.png',
+  'cranberry': 'Cranberry.png',
+  'durian': 'Durian.png',
+  'eggplant': 'Eggplant.png',
+  'venus fly trap': 'Venus-Fly-Trap.png',
+  'lotus': 'Lotus.png',
+  'glowshroom': 'Glowshroom.png',
+  'mint': 'Mint.png',
+  'moonflower': 'Moonflower.png',
+  'starfruit': 'Starfruit.png',
+  'moonglow': 'Moonglow.png',
+  'moon blossom': 'Moon-Blossom.png',
+  'cherry blossom': 'Cherry-Blossom.png',
+  'moon melon': 'Moon-Melon.png',
+  'beanstalk': 'Beanstalk.png',
+  'blood banana': 'Blood-Banana.png',
+  'moon mango': 'Moon-Mango.png',
+  'celestiberry': 'Celestiberry.png',
 
   // Gears
-  'watering can': '💧🥫',
-  'trowel': '🥄',
-  'basic sprinkler': '🚿',
-  'advanced sprinkler': '🚀🚿',
-  'godly sprinkler': '🙏🚿',
-  'lightning rod': '⚡️🎣',
-  'master sprinkler': '👑🚿',
-  'chocolate sprinkler': '🍫🚿',
-  'recall wrench': '🔧↩️',
-  'favorite tool': '❤️‍🩹🛠️',
-  'harvest tool': '🌾🛠️',
-  'star caller': '⭐📞',
-  'classic trowel': '🥄',
+  'watering can': 'Watering-Can.png',
+  'trowel': 'Trowel.png',
+  'basic sprinkler': 'Basic-Sprinkler.png',
+  'advanced sprinkler': 'Advanced-Sprinkler.png',
+  'godly sprinkler': 'Godly-Sprinkler.png',
+  'lightning rod': 'Lightning-Rod.png',
+  'master sprinkler': 'Master-Sprinkler.png',
+  'chocolate sprinkler': 'Chocolate-Sprinkler.png',
+  'recall wrench': 'Recall-Wrench.png',
+  'favorite tool': 'Favorite-Tool.png',
+  'harvest tool': 'Harvest-Tool.png',
+  'star caller': 'Star-Caller.png',
+  'classic trowel': 'Classic-Trowel.png',
 
   // Pets
-  'golden lab': '🐕🟨',
-  'dog': '🐶',
-  'bunny': '🐰',
-  'black bunny': '🐰🖤',
-  'chicken': '🐔',
-  'cat': '🐱',
-  'deer': '🦌',
-  'orange tabby': '🐈🟧',
-  'spotted deer': '🦌',
-  'pig': '🐷',
-  'rooster': '🐓',
-  'monkey': '🐒',
-  'cow': '🐄',
-  'silver monkey': '🐒🥈',
-  'sea otter': '🦦🌊',
-  'turtle': '🐢',
-  'polar bear': '🐻‍❄️',
-  'snail': '🐌',
-  'giant ant': '🐜',
-  'caterpillar': '🐛',
-  'praying mantis': '🙏🦗',
-  'dragonfly': '🦋',
-  'panda': '🐼',
-  'hedgehog': '🦔',
-  'mole': '🦔',
-  'frog': '🐸',
-  'echo frog': '🔊🐸',
-  'night owl': '🦉🌙',
-  'raccoon': '🦝',
-  'kiwi': '🥝',
-  'owl': '🦉',
-  'chicken zombie': '🧟🐔',
-  'blood owl': '🩸🦉',
-  'blood hedgehog': '🩸🦔',
-  'blood kiwi': '🩸🥝',
-  'grey mouse': '🐭',
-  'brown mouse': '🐭🟫',
-  'moon cat': '🌙🐱',
-  'squirrel': '🐿️',
-  'red giant ant': '🐜🔴',
-  'red fox': '🦊',
+  'golden lab': 'Golden-Lab.png',
+  'dog': 'Dog.png',
+  'bunny': 'Bunny.png',
+  'black bunny': 'Black-Bunny.png',
+  'chicken': 'Chicken.png',
+  'cat': 'Cat.png',
+  'deer': 'Deer.png',
+  'orange tabby': 'Orange-Tabby.png',
+  'spotted deer': 'Spotted-Deer.png',
+  'pig': 'Pig.png',
+  'rooster': 'Rooster.png',
+  'monkey': 'Monkey.png',
+  'cow': 'Cow.png',
+  'silver monkey': 'Silver-Monkey.png',
+  'sea otter': 'Sea-Otter.png',
+  'turtle': 'Turtle.png',
+  'polar bear': 'Polar-Bear.png',
+  'snail': 'Snail.png',
+  'giant ant': 'Giant-Ant.png',
+  'caterpillar': 'Caterpillar.png',
+  'praying mantis': 'Praying-Mantis.png',
+  'dragonfly': 'Dragonfly.png',
+  'panda': 'Panda.png',
+  'hedgehog': 'Hedgehog.png',
+  'mole': 'Mole.png',
+  'frog': 'Frog.png',
+  'echo frog': 'Echo-Frog.png',
+  'night owl': 'Night-Owl.png',
+  'raccoon': 'Raccoon.png',
+  'kiwi': 'Kiwi.png',
+  'owl': 'Owl.png',
+  'chicken zombie': 'Chicken-Zombie.png',
+  'blood owl': 'Blood-Owl.png',
+  'blood hedgehog': 'Blood-Hedgehog.png',
+  'blood kiwi': 'Blood-Kiwi.png',
+  'grey mouse': 'Grey-Mouse.png',
+  'brown mouse': 'Brown-Mouse.png',
+  'moon cat': 'Moon-Cat.png',
+  'squirrel': 'Squirrel.png',
+  'red giant ant': 'Red-Giant-Ant.png',
+  'red fox': 'Red-Fox.png',
 
   // Eggs
-  'common egg': '🥚',
-  'uncommon egg': '🥚',
-  'rare egg': '🥚',
-  'legendary egg': '🥚',
-  'mythical egg': '🥚',
-  'bug egg': '🥚🐛',
-  'night egg': '🥚🌙',
+  'common egg': 'Common-Egg.png',
+  'uncommon egg': 'Uncommon-Egg.png',
+  'rare egg': 'Rare-Egg.png',
+  'legendary egg': 'Legendary-Egg.png',
+  'mythical egg': 'Mythical-Egg.png',
+  'bug egg': 'Bug-Egg.png',
+  'night egg': 'Night-Egg.png',
 
   // Seed Packs
-  'night seed pack': '🌙🌱📦',
-  'seed pack': '🌱📦',
-  'seeds': '🌱',
+  'night seed pack': 'Night-Seed-Pack.png',
+  'seed pack': 'Seed-Pack.png', // Assuming a generic seed pack image
+  'seeds': 'Seed-Pack.png', // Assuming a generic seeds image
 
   // Cosmetics
-  'twilight crate': '🌌📦',
-  'frog fountain': '🐸⛲',
-  'wheelbarrow': '🛒',
-  'small wood table': '🪵',
-  'beta gnome': '🤖🧚‍♂️',
-  'green female gnome': '👩‍🌾🟢',
-  'blue gnome': '🧚‍♂️🔵',
-  'axe stump': '🪓🪵',
-  'bamboo wind chimes': '🎍🎐',
-  'bird bath': '🐦🛁',
-  'blue well': '💙🕳️',
-  'brown stone pillar': '🪨🟫',
-  'brown bench': '🪵🪑',
-  'brick stack': '🧱',
-  'bookshelf': '📚',
-  'brown well': '🟫🕳️',
-  'classic gnome crate': '📦🧚‍♂️',
-  'campfire': '🔥',
-  'clothesline': '👚👕',
-  'common gnome crate': '📦🧚‍♂️',
-  'compost bin': '♻️🗑️',
-  'cooking pot': '🍲',
-  'dark stone pillar': '🪨🌑',
-  'curved canopy': '🏕️',
-  'farmers gnome crate': '🧑‍🌾📦',
-  'flat canopy': '⛺',
-  'fun crate': '🎉📦',
-  'red tractor': '🚜🔴',
-  'green tractor': '🚜🟢',
-  'grey stone pillar': '🪨🌫️',
-  'hay bale': '🌾📦',
-  'lamp post': '💡',
-  'large path tile': '🛤️',
-  'large stone pad': '🪨',
-  'large wood arbour': '🪵🌳',
-  'large wood flooring': '🪵',
-  'large wood table': '🪵',
-  'log': '🪵',
-  'log bench': '🪵🪑',
-  'sign crate': '🪧📦',
-  'bloodmoon crate': '🩸🌕📦',
-  'red well': '❤️🕳️',
-  'medium circle tile': '🟠',
-  'torch': '🔦',
-  'small circle tile': '⚪',
-  'wood fence': '🪵🚧',
-  'small path tile': '🛤️',
-  'small wood flooring': '🪵',
-  'mini tv': '📺',
-  'rock pile': '🪨',
-  'light on ground': '💡⬇️',
-  'rake': '🍂',
-  'orange umbrella': '☂️🍊',
-  'medium wood flooring': '🪵',
-  'water trough': '💧',
-  'shovel grave': '🪦',
-  'white pottery': '🏺⚪',
-  'white bench': '🪑⚪',
-  'small stone pad': '🪨',
-  'small stone table': '🪨',
-  'small wood arbour': '🪵🌳',
-  'viney beam': '🌿🪵',
-  'viney ring walkway': '🌿⭕🛤️',
-  'square metal arbour': '🔲🌳',
-  'small stone lantern': '🪨🏮',
-  'hay bail': '🌾📦',
-  'long stone table': '🪨',
-  'medium stone table': '🪨',
-  'metal wind chime': '🎶🎐',
-  'mysterious crate': '❓📦',
-  'red pottery': '🏺🔴',
-  'ring walkway': '⭕🛤️',
-  'wood pile': '🪵🪵',
-  'yellow umbrella': '☂️🟡'
+  'twilight crate': 'Twilight-Crate.png',
+  'frog fountain': 'Frog-Fountain.png',
+  'wheelbarrow': 'Wheelbarrow.png',
+  'small wood table': 'Small-Wood-Table.png',
+  'beta gnome': 'Beta-Gnome.png',
+  'green female gnome': 'Green-Female-Gnome.png',
+  'blue gnome': 'Blue-Gnome.png',
+  'axe stump': 'Axe-Stump.png',
+  'bamboo wind chimes': 'Bamboo-Wind-Chimes.png',
+  'bird bath': 'Bird-Bath.png',
+  'blue well': 'Blue-Well.png',
+  'brown stone pillar': 'Brown-Stone-Pillar.png',
+  'brown bench': 'Brown-Bench.png',
+  'brick stack': 'Brick-Stack.png',
+  'bookshelf': 'Bookshelf.png',
+  'brown well': 'Brown-Well.png',
+  'classic gnome crate': 'Classic-Gnome-Crate.png',
+  'campfire': 'Campfire.png',
+  'clothesline': 'Clothesline.png',
+  'common gnome crate': 'Common-Gnome-Crate.png',
+  'compost bin': 'Compost-Bin.png',
+  'cooking pot': 'Cooking-Pot.png',
+  'dark stone pillar': 'Dark-Stone-Pillar.png',
+  'curved canopy': 'Curved-Canopy.png',
+  'farmers gnome crate': 'Farmers-Gnome-Crate.png',
+  'flat canopy': 'Flat-Canopy.png',
+  'fun crate': 'Fun-Crate.png',
+  'red tractor': 'Red-Tractor.png',
+  'green tractor': 'Green-Tractor.png',
+  'grey stone pillar': 'Grey-Stone-Pillar.png',
+  'hay bale': 'Hay-Bale.png',
+  'lamp post': 'Lamp-Post.png',
+  'large path tile': 'Large-Path-Tile.png',
+  'large stone pad': 'Large-Stone-Pad.png',
+  'large wood arbour': 'Large-Wood-Arbour.png',
+  'large wood flooring': 'Large-Wood-Flooring.png',
+  'large wood table': 'Large-Wood-Table.png',
+  'log': 'Log.png',
+  'log bench': 'Log-Bench.png',
+  'sign crate': 'Sign-Crate.png',
+  'bloodmoon crate': 'Bloodmoon-Crate.png',
+  'red well': 'Red-Well.png',
+  'medium circle tile': 'Medium-Circle-Tile.png',
+  'torch': 'Torch.png',
+  'small circle tile': 'Small-Circle-Tile.png',
+  'wood fence': 'Wood-Fence.png',
+  'small path tile': 'Small-Path-Tile.png',
+  'small wood flooring': 'Small-Wood-Flooring.png',
+  'mini tv': 'Mini-TV.png',
+  'rock pile': 'Rock-Pile.png',
+  'light on ground': 'Light-On-Ground.png',
+  'rake': 'Rake.png',
+  'orange umbrella': 'Orange-Umbrella.png',
+  'medium wood flooring': 'Medium-Wood-Flooring.png',
+  'water trough': 'Water-Trough.png',
+  'shovel grave': 'Shovel-Grave.png',
+  'white pottery': 'White-Pottery.png',
+  'white bench': 'White-Bench.png',
+  'small stone pad': 'Small-Stone-Pad.png',
+  'small stone table': 'Small-Stone-Table.png',
+  'small wood arbour': 'Small-Wood-Arbour.png',
+  'viney beam': 'Viney-Beam.png',
+  'viney ring walkway': 'Viney-Ring-Walkway.png',
+  'square metal arbour': 'Square-Metal-Arbour.png',
+  'small stone lantern': 'Small-Stone-Lantern.png',
+  'hay bail': 'Hay-Bale.png',
+  'long stone table': 'Long-Stone-Table.png',
+  'medium stone table': 'Medium-Stone-Table.png',
+  'metal wind chime': 'Metal-Wind-Chime.png',
+  'mysterious crate': 'Mysterious-Crate.png',
+  'red pottery': 'Red-Pottery.png',
+  'ring walkway': 'Ring-Walkway.png',
+  'wood pile': 'Wood-Pile.png',
+  'yellow umbrella': 'Yellow-Umbrella.png'
 };
 
-// Default fallback emojis for each category
-const defaultEmojis = {
-  [SectionCategory.GEAR]: '⚙️',
-  [SectionCategory.SEEDS]: '🌱',
-  [SectionCategory.EGGS]: '🥚',
-  [SectionCategory.HONEY]: '🍯',
-  [SectionCategory.COSMETICS]: '💅',
-  [SectionCategory.NIGHT]: '🌙'
-};
-
-// Function to get emoji for an item
-const getEmojiForItem = (itemName, category) => {
+// Function to get image path for an item
+const getImageForItem = (itemName: string, category: SectionCategory) => {
   const normalizedName = itemName.toLowerCase().trim();
-  return emojiMap[normalizedName] || defaultEmojis[category] || '📦';
+  const imageFileName = itemImageMap[normalizedName];
+
+  // If a specific image exists, use it. Otherwise, use a default image based on category.
+  if (imageFileName) {
+    return `/assets/images/gag/${imageFileName}`;
+  }
+
+  // Fallback images (you might want to create actual default image files for these)
+  switch (category) {
+    case SectionCategory.GEAR:
+      return '/assets/images/gag/Default-Gear.png'; // Create this image
+    case SectionCategory.SEEDS:
+      return '/assets/images/gag/Default-Seed.png'; // Create this image
+    case SectionCategory.EGGS:
+      return '/assets/images/gag/Default-Egg.png'; // Create this image
+    case SectionCategory.HONEY:
+      return '/assets/images/gag/Default-Honey.png'; // Create this image
+    case SectionCategory.COSMETICS:
+      return '/assets/images/gag/Default-Cosmetic.png'; // Create this image
+    case SectionCategory.NIGHT:
+      return '/assets/images/gag/Default-Night.png'; // Create this image
+    default:
+      return '/assets/images/gag/Default-Item.png'; // Generic fallback image
+  }
 };
 
-/***************************  SECTIONS LAYOUT  ***************************/
+/*************************** SECTIONS LAYOUT  ***************************/
 
 export default function Sections() {
   const theme = useTheme();
@@ -307,7 +320,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.GEAR),
+              image: getImageForItem(item.name, SectionCategory.GEAR), // Changed from emoji to image
               link: `#gear-${index}`,
               category: SectionCategory.GEAR
             });
@@ -319,7 +332,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.SEEDS),
+              image: getImageForItem(item.name, SectionCategory.SEEDS), // Changed from emoji to image
               link: `#seeds-${index}`,
               category: SectionCategory.SEEDS
             });
@@ -331,7 +344,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.EGGS),
+              image: getImageForItem(item.name, SectionCategory.EGGS), // Changed from emoji to image
               link: `#eggs-${index}`,
               category: SectionCategory.EGGS
             });
@@ -343,7 +356,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.HONEY),
+              image: getImageForItem(item.name, SectionCategory.HONEY), // Changed from emoji to image
               link: `#honey-${index}`,
               category: SectionCategory.HONEY
             });
@@ -355,7 +368,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.COSMETICS),
+              image: getImageForItem(item.name, SectionCategory.COSMETICS), // Changed from emoji to image
               link: `#cosmetics-${index}`,
               category: SectionCategory.COSMETICS
             });
@@ -367,7 +380,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              emoji: getEmojiForItem(item.name, SectionCategory.NIGHT),
+              image: getImageForItem(item.name, SectionCategory.NIGHT), // Changed from emoji to image
               link: `#night-${index}`,
               category: SectionCategory.NIGHT
             });
@@ -488,7 +501,7 @@ export default function Sections() {
           ) : (
             <Grid container spacing={1.5}>
               {filterSections.map((item, index) => (
-                <Grid key={index} size={{ xs: 6, sm: 4, md: 4 }}>
+                <Grid key={index} xs={6} sm={4} md={4}> {/* Changed size to xs, sm, md props */}
                   <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
                     <motion.div
                       whileHover={{ scale: 1.02 }}
@@ -522,7 +535,7 @@ export default function Sections() {
                         />
                         <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
-                          {/* Emoji display instead of CardMedia */}
+                          {/* Image display instead of Emoji */}
                           <Box
                             sx={{
                               px: '14.5%',
@@ -531,18 +544,21 @@ export default function Sections() {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              height: '60%'
+                              height: '60%',
+                              overflow: 'hidden' // Important for image scaling
                             }}
                           >
-                            <Typography
-                              sx={{
-                                fontSize: { xs: '3rem', sm: '4rem', md: '5rem' },
-                                lineHeight: 1,
-                                userSelect: 'none'
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              style={{
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                objectFit: 'contain',
+                                userSelect: 'none',
+                                pointerEvents: 'none'
                               }}
-                            >
-                              {item.emoji}
-                            </Typography>
+                            />
                           </Box>
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
                             <Wave />
