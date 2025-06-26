@@ -1,5 +1,5 @@
 // Import Tabler Icons (these imports are still needed if you render the icons as components elsewhere)
-import {
+/*import {
   IconPlant2,
   IconSeed,
   IconPlant,
@@ -13,7 +13,7 @@ import {
   IconShovel,
   IconStarFilled,
   IconAward,
-} from '@tabler/icons-react';
+} from '@tabler/icons-react'; */
 
 
 const linkProps = { target: '_blank', rel: 'noopener noreferrer' };
