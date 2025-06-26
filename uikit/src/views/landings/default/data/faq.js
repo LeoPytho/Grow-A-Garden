@@ -13,7 +13,7 @@ export const faq = {
     },
     {
       question: `How frequently is the information updated?`,
-      answer: `Our data is designed to be as real-time as possible. Stock and restock times are updated every few minutes, while in-game weather information is refreshed every 15 minutes to ensure you have the latest data for your farming decisions.`,
+      answer: `Our data is designed to be as real-time as possible. Stock and restock times are updated every few minutes, while in-game weather information is refreshed every 7 seconds to ensure you have the latest data for your farming decisions.`,
       category: 'Data & Updates'
     },
     {
@@ -66,7 +66,7 @@ export const faq = {
     },
   ],
   getInTouch: {
-    link: { children: 'Get in Touch', href: branding.company.socialLink.support, target: '_blank', rel: 'noopener noreferrer' }
+    link: { children: 'Get in Touch', href: 'https://whatsapp.com/channel/0029Vah3uvQ11ulW8yfEyt28', target: '_blank', rel: 'noopener noreferrer' }
   },
   categories: ['General Information', 'Data & Updates', 'Accessing Information', 'Support & Feedback', 'Future Developments'],
   activeCategory: 'General Information'
