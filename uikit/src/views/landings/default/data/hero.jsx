@@ -6,9 +6,9 @@ import Typography from '@mui/material/Typography';
 // or you might want to replace it with a direct game link later.
 import { SECTION_PATH } from '@/path';
 
-// --- Import your local video and image files ---
-import gameTrailerVideo from './VID-20250626-WA0381.mp4';
-import gameTrailerThumbnail from './IMG-20250626-WA0384.jpg';
+// --- REMOVE THE LOCAL IMPORTS FOR VIDEO/IMAGE ---
+// import gameTrailerVideo from './vid.mp4'; // REMOVE THIS LINE
+// import gameTrailerThumbnail from './foto.png'; // REMOVE THIS LINE
 // -------------------------------------------------
 
 // Helper function to create a simple SVG data URI
@@ -94,10 +94,10 @@ export const hero = {
   headLine: 'Real-time Info for Your Grow A Garden Adventure',
   captionLine: 'Stay updated on in-game stock, current weather, and precise restock times to optimize your gardening strategy!',
   primaryBtn: { children: 'View Stock', href: '/stock' },
-  // --- Using imported local media files ---
-  videoSrc: gameTrailerVideo,
-  videoThumbnail: gameTrailerThumbnail,
-  // ----------------------------------------
+  // --- Update these paths to reference the public directory ---
+  videoSrc: '/VID-20250626-WA0381.mp4', // Directly reference from public folder
+  videoThumbnail: '/foto.png', // Directly reference from public folder
+  // ----------------------------------------------------------
   listData: [
     { image: stockSvg, title: 'Current Stock' },
     { image: weatherSvg, title: 'In-Game Weather' },
