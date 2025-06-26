@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 // @next
 import NextLink from 'next/link';
@@ -15,7 +15,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
 
 // @third-party
 import { motion } from 'framer-motion';
@@ -27,303 +26,314 @@ import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
 
 import useFocusWithin from '@/hooks/useFocusWithin';
+import { PAGE_PATH } from '@/path';
 import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
+import GetImagePath from '@/utils/GetImagePath';
 
 // @assets
 import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
-// Define the API endpoint
-const API_URL = '/api/growagarden/stock';
+var SectionCategory;
+
+(function (SectionCategory) {
+  SectionCategory['GEAR'] = 'gear';
+  SectionCategory['SEEDS'] = 'seeds';
+  SectionCategory['EGGS'] = 'eggs';
+  SectionCategory['HONEY'] = 'honey';
+  SectionCategory['COSMETICS'] = 'cosmetics';
+  SectionCategory['NIGHT'] = 'night';
+})(SectionCategory || (SectionCategory = {}));
+
+const filterList = [
+  { title: 'All Items', value: '' },
+  { title: 'Gear Stock', value: SectionCategory.GEAR },
+  { title: 'Seeds Stock', value: SectionCategory.SEEDS },
+  { title: 'Eggs Stock', value: SectionCategory.EGGS },
+  { title: 'Honey Stock', value: SectionCategory.HONEY },
+  { title: 'Cosmetics Stock', value: SectionCategory.COSMETICS },
+  { title: 'Night Stock', value: SectionCategory.NIGHT }
+];
+
+/***************************  SECTIONS LAYOUT  ***************************/
 
 export default function Sections() {
-const theme = useTheme();
-const [stockData, setStockData] = useState(null);
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
-const [lastUpdated, setLastUpdated] = useState(null);
-const [activeCategory, setActiveCategory] = useState('All');
-const [searchValue, setSearchValue] = useState('');
+  const theme = useTheme();
+  const [filterBy, setFilterBy] = useState('');
+  const [sections, setSections] = useState([]);
+  const [filterSections, setFilterSections] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-// --- Data Fetching and Polling ---
-useEffect(() => {
-const fetchGrowAGardenData = async () => {
-try {
-if (stockData === null) {
-setLoading(true);
-}
-setError(null);
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/growagarden/stock');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        
+        const data = await response.json();
+        
+        // Transform API data to match the expected structure
+        const transformedSections = [];
+        
+        // Transform each stock category
+        if (data.gearStock) {
+          data.gearStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/gear-default.svg',
+              link: `#gear-${index}`, // Since we don't have specific links, using hash
+              category: SectionCategory.GEAR
+            });
+          });
+        }
 
-const response = await fetch(API_URL);  
+        if (data.seedsStock) {
+          data.seedsStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/seeds-default.svg',
+              link: `#seeds-${index}`,
+              category: SectionCategory.SEEDS
+            });
+          });
+        }
 
-    // --- ENHANCED LOGGING START ---  
-    if (!response.ok) {  
-      const errorText = await response.text(); // Try to read response body for more details  
-      console.error(`API Error: HTTP Status ${response.status}`, {  
-        url: response.url,  
-        statusText: response.statusText,  
-        responseBody: errorText // Log the response body  
-      });  
-      throw new Error(`Server responded with status ${response.status}: ${response.statusText || 'Unknown Error'}.`);  
-    }  
-    // --- ENHANCED LOGGING END ---  
+        if (data.eggStock) {
+          data.eggStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/eggs-default.svg',
+              link: `#eggs-${index}`,
+              category: SectionCategory.EGGS
+            });
+          });
+        }
 
-    const data = await response.json();  
-    setStockData(data);  
-    setLastUpdated(new Date());  
-  } catch (err) {  
-    // --- ENHANCED LOGGING START ---  
-    console.error("Failed to fetch Grow A Garden stock data. Details:", err);  
-    // --- ENHANCED LOGGING END ---  
+        if (data.honeyStock) {
+          data.honeyStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/honey-default.svg',
+              link: `#honey-${index}`,
+              category: SectionCategory.HONEY
+            });
+          });
+        }
 
-    let errorMessage = "Failed to load Grow A Garden data. Please try again later.";  
-    if (err instanceof TypeError && err.message === 'Failed to fetch') {  
-      errorMessage = "Network error. Please check your internet connection.";  
-    } else if (err.message.includes("Server responded with status")) {  
-      errorMessage = `Data loading failed: ${err.message}`;  
-    }  
-    setError(errorMessage);  
-  } finally {  
-    setLoading(false);  
-  }  
-};  
+        if (data.cosmeticsStock) {
+          data.cosmeticsStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/cosmetics-default.svg',
+              link: `#cosmetics-${index}`,
+              category: SectionCategory.COSMETICS
+            });
+          });
+        }
 
-fetchGrowAGardenData();  
+        if (data.nightStock) {
+          data.nightStock.forEach((item, index) => {
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: item.image || '/assets/images/presentation/night-default.svg',
+              link: `#night-${index}`,
+              category: SectionCategory.NIGHT
+            });
+          });
+        }
 
-const intervalId = setInterval(fetchGrowAGardenData, 7000);  
+        setSections(transformedSections);
+        setFilterSections(transformedSections);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-return () => clearInterval(intervalId);
+    fetchData();
+  }, []);
 
-}, [stockData]);
+  const handleSearchValue = (event) => {
+    const search = event.target.value.trim().toLowerCase();
+    setSearchValue(search);
+  };
 
-// --- Process and Filter Stock Data ---
-const processedItems = useMemo(() => {
-if (!stockData) return [];
+  useEffect(() => {
+    const newData = sections.filter((value) => {
+      if (searchValue) {
+        return value.title.toLowerCase().includes(searchValue.toLowerCase());
+      } else {
+        return value;
+      }
+    });
+    setFilterSections(newData);
+  }, [searchValue, sections]);
 
-const allItems = [];  
-if (stockData.seedsStock) {  
-  stockData.seedsStock.forEach(item => allItems.push({ ...item, category: 'Seeds' }));  
-}  
-if (stockData.gearStock) {  
-  stockData.gearStock.forEach(item => allItems.push({ ...item, category: 'Gears' }));  
-}  
-if (stockData.eggStock) {  
-  stockData.eggStock.forEach(item => allItems.push({ ...item, category: 'Eggs' }));  
-}  
-if (stockData.honeyStock) {  
-  stockData.honeyStock.forEach(item => allItems.push({ ...item, category: 'Honey' }));  
-}  
-if (stockData.cosmeticsStock) {  
-  stockData.cosmeticsStock.forEach(item => allItems.push({ ...item, category: 'Cosmetics' }));  
-}  
-if (stockData.nightStock) {  
-  stockData.nightStock.forEach(item => allItems.push({ ...item, category: 'Night Items' }));  
-}  
-if (stockData.easterStock) {  
-  stockData.easterStock.forEach(item => allItems.push({ ...item, category: 'Easter Items' }));  
-}  
+  const isFocusWithin = useFocusWithin();
 
-let filteredByCategory = activeCategory === 'All'  
-  ? allItems  
-  : allItems.filter(item => item.category === activeCategory);  
+  if (loading) {
+    return (
+      <>
+        <SectionHero heading="Craft Stunning Design with SaasAble Blocks" search={false} offer />
+        <ContainerWrapper>
+          <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+            <CircularProgress size={60} />
+            <Typography variant="h6" sx={{ mt: 2 }}>Loading stock data...</Typography>
+          </Stack>
+        </ContainerWrapper>
+      </>
+    );
+  }
 
-if (searchValue) {  
-  filteredByCategory = filteredByCategory.filter(item =>  
-    item.name.toLowerCase().includes(searchValue.toLowerCase())  
-  );  
-}  
+  if (error) {
+    return (
+      <>
+        <SectionHero heading="Craft Stunning Design with SaasAble Blocks" search={false} offer />
+        <ContainerWrapper>
+          <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
+            <Typography variant="h6" color="error" sx={{ mb: 2 }}>Error loading data: {error}</Typography>
+            <Button variant="contained" onClick={() => window.location.reload()}>
+              Retry
+            </Button>
+          </Stack>
+        </ContainerWrapper>
+      </>
+    );
+  }
 
-return filteredByCategory;
-
-}, [stockData, activeCategory, searchValue]);
-
-const categoryFilters = useMemo(() => {
-if (!stockData) return [{ title: 'All', value: 'All' }];
-const categories = new Set();
-// Only add categories that actually have items
-if (stockData.seedsStock && stockData.seedsStock.length > 0) categories.add('Seeds');
-if (stockData.gearStock && stockData.gearStock.length > 0) categories.add('Gears');
-if (stockData.eggStock && stockData.eggStock.length > 0) categories.add('Eggs');
-if (stockData.honeyStock && stockData.honeyStock.length > 0) categories.add('Honey');
-if (stockData.cosmeticsStock && stockData.cosmeticsStock.length > 0) categories.add('Cosmetics');
-if (stockData.nightStock && stockData.nightStock.length > 0) categories.add('Night Items');
-if (stockData.easterStock && stockData.easterStock.length > 0) categories.add('Easter Items');
-
-return [{ title: 'All', value: 'All' }, ...Array.from(categories).map(cat => ({ title: cat, value: cat }))];
-
-}, [stockData]);
-
-const handleSearchValue = (event) => {
-setSearchValue(event.target.value.trim());
-};
-
-const isFocusWithin = useFocusWithin();
-
-const formatLastUpdated = (date) => {
-if (!date) return 'N/A';
-const now = new Date();
-const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-if (diffSeconds < 60) {  
-  return `Terakhir diperbarui: ${diffSeconds} detik yang lalu`;  
-} else if (diffSeconds < 3600) {  
-  const minutes = Math.floor(diffSeconds / 60);  
-  return `Terakhir diperbarui: ${minutes} menit yang lalu`;  
-} else {  
-  return `Terakhir diperbarui: ${date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;  
-}
-
-};
-
-return (
-<>
-<SectionHero  
-heading="Grow A Garden: Informasi Stok & Real-time"  
-caption="Tetap update dengan ketersediaan item dalam game, kondisi cuaca, dan waktu restock untuk mengoptimalkan strategi berkebun Anda!"  
-search={false}  
-offer={false}  
-/>
-<ContainerWrapper>
-<Stack sx={{ py: 6, gap: { xs: 3, sm: 4, md: 5 } }}>
-<Stack
-direction={{ xs: 'column', md: 'row' }}
-sx={{ alignItems: 'center', justifyContent: 'space-between', gap: { xs: 2.5, md: 1.5 } }}
->
-<OutlinedInput
-placeholder="Cari item... (contoh: Wortel, Alat Siram, Telur Langka)"
-slotProps={{ input: { 'aria-label': 'Cari item' } }}
-sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
-startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
-onChange={handleSearchValue}
-value={searchValue}
-/>
-<Stack direction="row" sx={{ gap: 1.5, flexWrap: 'wrap' }}>
-{categoryFilters.map((item, index) => (
-<Button
-key={index}
-variant={activeCategory === item.value ? 'contained' : 'outlined'}
-size="small"
-sx={{
-...theme.typography.subtitle2,
-whiteSpace: 'nowrap',
-[theme.breakpoints.down('sm')]: { px: 1.5, py: 1 }
-}}
-onClick={() => {
-setActiveCategory(item.value);
-}}
->
-{item.title}
-</Button>
-))}
-</Stack>
-</Stack>
-
-{/* Real-time Update Information */}  
-      <Box sx={{ textAlign: 'center', mt: 2, mb: 3 }}>  
-        <Typography variant="body2" color="text.secondary">  
-          **Informasi Penting:** Data terbaru selalu tersedia setiap **5 menit**.  
-          Contohnya, jika data diperbarui pukul 17.00, maka akan tersedia lagi di 17.05.  
-        </Typography>  
-        <Typography variant="caption" color="text.primary" sx={{ mt: 1, display: 'block' }}>  
-          {formatLastUpdated(lastUpdated)}  
-        </Typography>  
-      </Box>  
-
-
-      {loading && (  
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 200 }}>  
-          <CircularProgress />  
-          <Typography variant="h6" sx={{ ml: 2 }}>Memuat data...</Typography>  
-        </Box>  
-      )}  
-
-      {error && (  
-        <Alert severity="error" sx={{ my: 3 }}>  
-          {error}  
-        </Alert>  
-      )}  
-
-      {!loading && !error && processedItems.length === 0 && (  
-        <Alert severity="info" sx={{ my: 3 }}>  
-          Tidak ada item yang ditemukan untuk kategori atau istilah pencarian yang dipilih.  
-        </Alert>  
-      )}  
-
-      {!loading && !error && processedItems.length > 0 && (  
-        <Grid container spacing={1.5}>  
-          {processedItems.map((item, index) => (  
-            <Grid item xs={6} sm={4} md={4} key={item.name + item.category + index}>  
-              <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>  
-                <motion.div  
-                  whileHover={{ scale: 1.02 }}  
-                  initial={{ opacity: 0, y: 25 }}  
-                  whileInView={{ opacity: 1, y: 0 }}  
-                  viewport={{ once: true }}  
-                  transition={{  
-                    duration: 0.5  
-                  }}  
-                >  
-                  <GraphicsCard  
-                    sx={{  
-                      height: { xs: 240, sm: 324, md: 380 },  
-                      position: 'relative',  
-                      overflow: 'hidden',  
-                      ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })  
-                    }}  
-                  >  
-                    <Link  
-                      href={`#${item.category.replace(/\s/g, '-')}-${item.name.replace(/\s/g, '-')}`}  
-                      aria-label={`${item.name} Stock`}  
-                      sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}  
-                    />  
-                    <Background />  
-                    <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>  
-                      <CardMedia  
-                        component="img"  
-                        image={item.image || '/assets/images/placeholder-item.png'} // Fallback placeholder  
-                        sx={{ px: '14.5%', pt: '16%', pb: { xs: 2, md: 1 }, objectFit: 'contain' }}  
-                        alt={`${item.name} image`}  
-                        loading="lazy"  
-                      />  
-                      <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>  
-                        <Wave />  
-                      </Box>  
-                    </Box>  
-                    <Stack  
-                      sx={{  
-                        height: 177,  
-                        bottom: 0,  
-                        width: 1,  
-                        position: 'absolute',  
-                        justifyContent: 'end',  
-                        textAlign: 'center',  
-                        gap: { xs: 0.25, md: 0.5, sm: 1 },  
-                        p: 3,  
-                        background: `linear-gradient(180deg, ${alpha(theme.palette.grey[100], 0)} 0%, ${theme.palette.grey[100]} 100%)`  
-                      }}  
-                    >  
-                      <Typography variant="h4" sx={{ color: 'primary.main' }}>  
-                        {item.name}  
-                      </Typography>  
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>  
-                        **Stok:** {item.value} {item.category}  
-                      </Typography>  
-                      {item.seen && (  
-                         <Typography variant="caption" sx={{ color: 'text.disabled' }}>  
-                           Terakhir terlihat: {new Date(item.seen).toLocaleTimeString('id-ID')}  
-                         </Typography>  
-                      )}  
-                    </Stack>  
-                  </GraphicsCard>  
-                </motion.div>  
-              </GraphicsCard>  
-            </Grid>  
-          ))}  
-        </Grid>  
-      )}  
-    </Stack>  
-  </ContainerWrapper>  
-</>
-
-);
+  return (
+    <>
+      <SectionHero heading="Grow A Garden Stock Items" search={false} offer />
+      <ContainerWrapper>
+        <Stack sx={{ py: 6, gap: { xs: 3, sm: 4, md: 5 } }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            sx={{ alignItems: 'center', justifyContent: 'space-between', gap: { xs: 2.5, md: 1.5 } }}
+          >
+            <OutlinedInput
+              placeholder="Search for items... (e.g., Carrot, Trowel, Common Egg)"
+              slotProps={{ input: { 'aria-label': 'Search items' } }}
+              sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
+              startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
+              onChange={handleSearchValue}
+              value={searchValue}
+            />
+            <Stack direction="row" sx={{ gap: 1.5, flexWrap: 'wrap' }}>
+              {filterList.map((item, index) => (
+                <Button
+                  key={index}
+                  variant={filterBy === item.value ? 'contained' : 'outlined'}
+                  size="small"
+                  sx={{
+                    ...theme.typography.subtitle2,
+                    whiteSpace: 'nowrap',
+                    [theme.breakpoints.down('sm')]: { px: 1.5, py: 1 }
+                  }}
+                  onClick={() => {
+                    setFilterBy(item.value);
+                    setFilterSections(item.value === '' ? sections : sections.filter((section) => section.category === item.value));
+                  }}
+                >
+                  {item.title}
+                </Button>
+              ))}
+            </Stack>
+          </Stack>
+          
+          {filterSections.length === 0 ? (
+            <Stack sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+              <Typography variant="h6" color="text.secondary">
+                {searchValue ? `No items found for "${searchValue}"` : 'No items available'}
+              </Typography>
+            </Stack>
+          ) : (
+            <Grid container spacing={1.5}>
+              {filterSections.map((item, index) => (
+                <Grid key={index} size={{ xs: 6, sm: 4, md: 4 }}>
+                  <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      initial={{ opacity: 0, y: 25 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.5
+                      }}
+                    >
+                      <GraphicsCard
+                        sx={{
+                          height: { xs: 240, sm: 324, md: 380 },
+                          position: 'relative',
+                          overflow: 'hidden',
+                          ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })
+                        }}
+                      >
+                        <Link
+                          href={item.link}
+                          component={NextLink}
+                          aria-label={item.title}
+                          sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}
+                        />
+                        <Background />
+                        <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
+                          <CardMedia
+                            component="img"
+                            image={item.image}
+                            sx={{ px: '14.5%', pt: '16%', pb: { xs: 2, md: 1 }, objectFit: 'contain', maxHeight: '60%' }}
+                            alt={item.title}
+                            loading="lazy"
+                            onError={(e) => {
+                              // Fallback to a default image if the API image fails to load
+                              e.target.src = '/assets/images/presentation/default-item.svg';
+                            }}
+                          />
+                          <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
+                            <Wave />
+                          </Box>
+                        </Box>
+                        <Stack
+                          sx={{
+                            height: 177,
+                            bottom: 0,
+                            width: 1,
+                            position: 'absolute',
+                            justifyContent: 'end',
+                            textAlign: 'center',
+                            gap: { xs: 0.25, md: 0.5, sm: 1 },
+                            p: 3,
+                            background: `linear-gradient(180deg, ${alpha(theme.palette.grey[100], 0)} 0%, ${theme.palette.grey[100]} 100%)`
+                          }}
+                        >
+                          <Typography variant="h4" sx={{ color: 'primary.main' }}>
+                            {item.title}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                            {item.subTitle}
+                          </Typography>
+                        </Stack>
+                      </GraphicsCard>
+                    </motion.div>
+                  </GraphicsCard>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Stack>
+      </ContainerWrapper>
+    </>
+  );
 }
