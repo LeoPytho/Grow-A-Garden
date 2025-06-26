@@ -143,12 +143,12 @@ export const feature20 = {
       content: 'Explore unique environments, each with its own special plants and challenges.'
     },
     {
-      icon: { name: 'tabler-watering-can' },
+      icon: { name: 'tabler-droplet' },
       title: 'Deep Farming Mechanics',
       content: 'Master advanced gardening techniques for optimal yield and rare discoveries.'
     },
     {
-      icon: { name: 'tabler-plant-pot' },
+      icon: { name: 'tabler-plant' },
       title: 'Limitless Customization',
       content: 'Personalize your garden and avatar with endless creative choices.'
     },
@@ -163,7 +163,7 @@ export const feature20 = {
       content: 'Embark on exciting quests to unlock rare items and prestigious achievements.'
     },
     {
-      icon: { name: 'tabler-star-filled' },
+      icon: { name: 'tabler-star' },
       title: 'Consistent Content Updates',
       content: 'Enjoy fresh content, new plants, and exciting seasonal events regularly.'
     }
@@ -184,7 +184,7 @@ export const feature21 = {
   features: [
     {
       animationDelay: 0.1,
-      icon: { name: 'tabler-plant-pot' },
+      icon: { name: 'tabler-plant' },
       title: 'Modular Garden Layouts'
     },
     {
@@ -204,12 +204,12 @@ export const feature21 = {
     },
     {
       animationDelay: 0.1,
-      icon: { name: 'tabler-watering-can' },
+      icon: { name: 'tabler-droplet' },
       title: 'Integrated Automated Systems'
     },
     {
       animationDelay: 0.2,
-      icon: { name: 'tabler-star-filled' },
+      icon: { name: 'tabler-star' },
       title: 'Player Rating & Recognition'
     },
     {
