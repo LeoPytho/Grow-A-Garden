@@ -49,10 +49,6 @@ const menuItems = [
     title: 'Support',
     menu: [
       {
-        label: 'Pricing',
-        link: { href: '/pricing', ...linkProps }
-      },
-      {
         label: 'FAQ',
         link: { href: '/faq', ...linkProps }
       },
@@ -61,12 +57,8 @@ const menuItems = [
         link: { href: branding.company.socialLink.support, ...linkProps }
       },
       {
-        label: 'License Terms',
-        link: { href: 'https://mui.com/store/license/', ...linkProps }
-      },
-      {
         label: 'Discord',
-        link: { href: branding.company.socialLink.discord, ...linkProps }
+        link: { href: 'https://discord.gg/kke7VpNPfr', ...linkProps }
       }
     ]
   },
@@ -75,13 +67,6 @@ const menuItems = [
     grid: { size: { xs: 6, sm: 'auto' } },
     title: 'Company',
     menu: [
-      {
-        label: 'Why Phoenixcoded?',
-        link: {
-          href: 'https://blog.saasable.io/a-decade-of-expertise-the-phoenixcoded-story-and-why-you-should-trust-us',
-          ...linkProps
-        }
-      },
       {
         label: 'About',
         link: { href: '/about', ...linkProps }
