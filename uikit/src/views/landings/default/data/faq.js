@@ -1,103 +1,73 @@
 // @project
-import branding from '@/branding.json';
+import branding from '@/branding.json'; // Assuming branding.json might contain 'Grow A Garden' for brandName
 
 export const faq = {
   heading: 'Frequently Asked Questions',
-  caption: `Answers to common queries about ${branding.brandName}.`,
-  defaultExpanded: 'Fees & Charges',
+  caption: `Answers to common queries about the ${branding.brandName} Info Channel.`,
+  defaultExpanded: 'Accessing Information', // New default expanded category
   faqList: [
     {
-      question: `Is ${branding.brandName} only for SaaS web apps?`,
-      answer: `While ${branding.brandName} is designed with SaaS applications in mind, it’s not limited to SaaS products. ${branding.brandName} is multipurpose and can be used for a variety of websites and applications, whether it’s for an agency, digital product, CRM, blog, AI platform, or any other system. ${branding.brandName} is versatile and adaptable to fit any use case, SaaS or not. It’s built for all types of projects!`,
-      category: 'General'
+      question: `What is the ${branding.brandName} Info Channel?`,
+      answer: `The ${branding.brandName} Info Channel is your go-to source for real-time data from the Grow A Garden Roblox game. We provide up-to-date information on in-game stock, current weather conditions within the game, and precise restock times to help you optimize your gardening strategy.`,
+      category: 'General Information'
     },
     {
-      question: `What makes ${branding.brandName} different from other UI Kits?`,
-      answer: `${branding.brandName} offers industry-specific templates, a React Material UI Kit, Figma UI Kit, and flexible customization options that cater to both front-end marketing and admin interfaces.`,
-      category: 'General'
+      question: `How frequently is the information updated?`,
+      answer: `Our data is designed to be as real-time as possible. Stock and restock times are updated every few minutes, while in-game weather information is refreshed every 15 minutes to ensure you have the latest data for your farming decisions.`,
+      category: 'Data & Updates'
     },
     {
-      question: `Is ${branding.brandName} suitable for both developers and designers?`,
+      question: `Where does the stock and restock information come from?`,
+      answer: `The stock and restock data is directly sourced from the Grow A Garden game servers through official APIs (or carefully monitored in-game data streams). We strive for accuracy and reliability to ensure you have the best information available.`,
+      category: 'Data & Updates'
+    },
+    {
+      question: `Is the in-game weather information accurate?`,
+      answer: `Yes, our in-game weather data reflects the actual weather conditions within the Grow A Garden game. This can be crucial for planning your planting and harvesting activities, as certain plants may thrive in specific weather conditions.`,
+      category: 'Data & Updates'
+    },
+    {
+      question: `Do I need to be logged into Roblox to use this channel?`,
+      answer: `No, you do not need to be logged into Roblox to view the information on our channel. It's publicly accessible to help all players plan their game sessions effectively.`,
+      category: 'Accessing Information'
+    },
+    {
+      question: `Can I access historical stock or weather data?`,
+      answer: `Currently, the ${branding.brandName} Info Channel focuses on providing real-time and near real-time data. Historical data logging and access features are something we are considering for future updates based on community feedback.`,
+      category: 'Data & Updates'
+    },
+    {
+      question: 'Are there any fees to use the Info Channel?',
+      answer: 'No, the Grow A Garden Info Channel is completely free to use for all players. Our goal is to enhance your gaming experience by providing valuable information.',
+      category: 'General Information'
+    },
+    {
+      question: 'How can I report inaccurate information?',
+      answer: `If you notice any discrepancies or believe information is inaccurate, please use the "Get in Touch" link below to contact our support team. Provide as much detail as possible, including screenshots or specific times, to help us investigate.`,
+      category: 'Support & Feedback'
+    },
+    {
+      question: 'Will new features be added to the Info Channel?',
       answer: {
-        content: `Yes, ${branding.brandName} is built for both, with a Figma UI kit for designers and React code for developers.`,
+        content: `Absolutely! We are continuously working to improve the ${branding.brandName} Info Channel. Future updates may include advanced filtering options, personalized alerts, and more detailed insights into game mechanics.`,
         type: 'list',
         data: [
-          { primary: 'Figma UI Kit for Designers.' },
-          { primary: 'React Material UI Code for Developers.' },
-          { primary: 'Seamless Collaboration.' }
+          { primary: `New Data Points (e.g., specific item prices)` },
+          { primary: `Personalized Notifications` },
+          { primary: `Community-driven Feature Requests` }
         ]
       },
-      category: 'General'
+      category: 'Future Developments'
     },
     {
-      question: `What is the difference between the Figma and codebase versions?`,
-      answer:
-        'The Figma version is for design and prototyping, while the codebase version provides ready-to-use React components for development.',
-      category: 'General'
+      question: 'Is this an official Grow A Garden tool?',
+      answer: `The ${branding.brandName} Info Channel is a community-driven resource created to support players of Grow A Garden. While it's built to be as accurate as possible using available data, it is not officially developed or maintained by the Roblox Corporation or the Grow A Garden game developers.`,
+      category: 'General Information'
     },
-    {
-      question: 'How can I download the template after purchase?',
-      answer: 'You will receive the template in a .zip format immediately after successfully purchasing the template.',
-      category: 'General'
-    },
-    {
-      question: `What's included in the ${branding.brandName} license?`,
-      answer: {
-        content: 'It includes the Figma UI kit, React Material UI codebase, regular updates, and customer support.',
-        type: 'list',
-        data: [
-          { primary: `One License = One End Product` },
-          { primary: `Separate License for Each Product` },
-          { primary: `Comply with License Terms` }
-        ]
-      },
-      category: 'Pricing & Licenses'
-    },
-    {
-      question: `Can I use ${branding.brandName} for multiple projects?`,
-      answer: {
-        content:
-          'No, one license allows usage in a single end product. For each new product or project, you are required to purchase a separate license. This ensures compliance with the licensing terms and provides ongoing support for each individual product. Make sure to obtain the appropriate license for every new project you work on.',
-        type: 'list',
-        data: [
-          { primary: `One License = One End Product` },
-          { primary: `Separate License for Each Product` },
-          { primary: `Comply with License Terms` }
-        ]
-      },
-      category: 'Pricing & Licenses'
-    },
-
-    {
-      question: 'Do you offer refunds?',
-      answer:
-        'Yes, we offer refunds, but only if you provide a valid reason to support your claim. For more details, please review our MUI Store Refund Policy.',
-      category: 'Pricing'
-    },
-    {
-      question: 'Do I get access to future updates?',
-      answer: {
-        content:
-          'Yes, you will receive future updates for 1 year from the date of purchase. If you need updates after 1 year, you will need to purchase the license again. However, this is not a renewal—your license is valid for a lifetime, but updates are limited to the 1-year period.',
-        type: 'list',
-        data: [{ primary: `1 Year Free Updates` }, { primary: `License validity is lifetime` }]
-      },
-      category: 'Support & Updates'
-    },
-    {
-      question: 'Is support included with the template purchase?',
-      answer: {
-        content:
-          'Support is included for 6 months, but it is limited to resolving issues within the template itself. We do not provide support for installation, customization queries, or troubleshooting unrelated issues. For ongoing support beyond 6 months, you will need to extend the support period with an additional purchase.',
-        type: 'list',
-        data: [{ primary: `6 Months Support` }, { primary: `No Installation Support` }, { primary: `No Customization Support` }]
-      },
-      category: 'Support & Updates'
-    }
   ],
   getInTouch: {
     link: { children: 'Get in Touch', href: branding.company.socialLink.support, target: '_blank', rel: 'noopener noreferrer' }
   },
-  categories: ['General', 'Pricing & Licenses', 'Support & Updates'],
-  activeCategory: 'General'
+  categories: ['General Information', 'Data & Updates', 'Accessing Information', 'Support & Feedback', 'Future Developments'],
+  activeCategory: 'General Information'
 };
