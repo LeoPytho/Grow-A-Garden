@@ -95,8 +95,8 @@ export const hero = {
   captionLine: 'Stay updated on in-game stock, current weather, and precise restock times to optimize your gardening strategy!',
   primaryBtn: { children: 'View Stock', href: '/stock' },
   // --- Update these paths to reference the public directory ---
-  videoSrc: '/VID-20250626-WA0381.mp4', // Directly reference from public folder
-  videoThumbnail: '/IMG-20250626-WA0384.jpg', // Directly reference from public folder
+  videoSrc: 'http://cdn.jkt48connect.my.id/J-c27d0e87si1y.mp4',
+  videoThumbnail: '/assets/videos/thumbnails/IMG-20250626-WA0384.jpg',
   // ----------------------------------------------------------
   listData: [
     { image: stockSvg, title: 'Current Stock' },
