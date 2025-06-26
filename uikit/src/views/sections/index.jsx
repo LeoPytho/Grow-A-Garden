@@ -15,11 +15,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import Alert from '@mui/material/Alert';
 
 // @third-party
 import { motion } from 'framer-motion';
-const jkt48Api = require('@jkt48/core');
 
 // @project
 import ContainerWrapper from '@/components/ContainerWrapper';
@@ -34,6 +32,9 @@ import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
 import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
+// @jkt48/core import
+const jkt48Api = require('@jkt48/core');
+
 var StockCategory;
 
 (function (StockCategory) {
@@ -46,8 +47,6 @@ var StockCategory;
   StockCategory['EASTER'] = 'easter';
 })(StockCategory || (StockCategory = {}));
 
-const API_KEY = 'JKTCONNECT';
-
 const filterList = [
   { title: 'All Items', value: '' },
   { title: 'Seeds', value: StockCategory.SEEDS },
@@ -59,155 +58,208 @@ const filterList = [
   { title: 'Easter', value: StockCategory.EASTER }
 ];
 
-const getCategoryIcon = (category) => {
-  const icons = {
-    seeds: '🌱',
-    gears: '⚙️',
-    eggs: '🥚',
-    honey: '🍯',
-    cosmetics: '💄',
-    night: '🌙',
-    easter: '🐰'
-  };
-  return icons[category] || '📦';
+// Transform stock data to sections format
+const transformStockToSections = (stockData) => {
+  const sections = [];
+  
+  if (stockData.seedsStock) {
+    stockData.seedsStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#seeds-${index}`,
+        category: StockCategory.SEEDS,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.gearStock) {
+    stockData.gearStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#gears-${index}`,
+        category: StockCategory.GEARS,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.eggStock) {
+    stockData.eggStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#eggs-${index}`,
+        category: StockCategory.EGGS,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.honeyStock) {
+    stockData.honeyStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#honey-${index}`,
+        category: StockCategory.HONEY,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.cosmeticsStock) {
+    stockData.cosmeticsStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#cosmetics-${index}`,
+        category: StockCategory.COSMETICS,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.nightStock) {
+    stockData.nightStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#night-${index}`,
+        category: StockCategory.NIGHT,
+        stock: item.value
+      });
+    });
+  }
+
+  if (stockData.easterStock) {
+    stockData.easterStock.forEach((item, index) => {
+      sections.push({
+        title: item.name,
+        subTitle: `Stock: ${item.value}`,
+        image: item.image || '/assets/images/placeholder.svg',
+        link: `#easter-${index}`,
+        category: StockCategory.EASTER,
+        stock: item.value
+      });
+    });
+  }
+
+  return sections;
 };
 
 /***************************  SECTIONS LAYOUT  ***************************/
 
-export default function JKT48StockSections() {
+export default function Sections() {
   const theme = useTheme();
   const [filterBy, setFilterBy] = useState('');
-  const [stockData, setStockData] = useState(null);
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [filterSections, setFilterSections] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchValue, setSearchValue] = useState('');
+  const [restockTimers, setRestockTimers] = useState({});
 
   // Fetch stock data from JKT48 API
-  useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const stockResponse = await jkt48Api.gag.getStock(API_KEY);
-        setStockData(stockResponse);
-        
-        // Convert stock data to sections format
-        const allItems = [];
-        
-        // Process each stock category
-        Object.entries(stockResponse).forEach(([categoryKey, items]) => {
-          if (Array.isArray(items) && categoryKey.endsWith('Stock')) {
-            const category = categoryKey.replace('Stock', '');
-            items.forEach((item, index) => {
-              allItems.push({
-                id: `${category}-${index}`,
-                title: item.name,
-                subTitle: `Quantity: ${item.value}`,
-                image: item.image || '/assets/images/placeholder.png',
-                category: category.toLowerCase(),
-                value: item.value,
-                link: `#${category}-${item.name.replace(/\s+/g, '-').toLowerCase()}`
-              });
-            });
-          }
-        });
-        
-        setFilteredItems(allItems);
-      } catch (err) {
-        console.error('Error fetching stock data:', err);
-        setError(err.message || 'Failed to fetch stock data');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchStockData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const apiKey = 'JKTCONNECT';
+      const stockData = await jkt48Api.gag.getStock(apiKey);
+      
+      const transformedSections = transformStockToSections(stockData);
+      setSections(transformedSections);
+      setFilterSections(transformedSections);
+      setRestockTimers(stockData.restockTimers || {});
+      
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      setError(error.message || 'Failed to fetch stock data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchStockData();
   }, []);
 
-  // Handle search
   const handleSearchValue = (event) => {
     const search = event.target.value.trim().toLowerCase();
     setSearchValue(search);
   };
 
-  // Filter items based on search and category
   useEffect(() => {
-    if (!stockData) return;
-
-    const allItems = [];
-    Object.entries(stockData).forEach(([categoryKey, items]) => {
-      if (Array.isArray(items) && categoryKey.endsWith('Stock')) {
-        const category = categoryKey.replace('Stock', '');
-        items.forEach((item, index) => {
-          allItems.push({
-            id: `${category}-${index}`,
-            title: item.name,
-            subTitle: `Quantity: ${item.value}`,
-            image: item.image || '/assets/images/placeholder.png',
-            category: category.toLowerCase(),
-            value: item.value,
-            link: `#${category}-${item.name.replace(/\s+/g, '-').toLowerCase()}`
-          });
-        });
+    const newData = sections.filter((value) => {
+      if (searchValue) {
+        return value.title.toLowerCase().includes(searchValue.toLowerCase());
+      } else {
+        return value;
       }
     });
+    setFilterSections(newData);
+  }, [searchValue, sections]);
 
-    let filtered = allItems;
-
-    // Apply category filter
-    if (filterBy) {
-      filtered = filtered.filter(item => item.category === filterBy);
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    if (hours > 0) {
+      return `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    } else {
+      return `${seconds}s`;
     }
-
-    // Apply search filter
-    if (searchValue) {
-      filtered = filtered.filter(item => 
-        item.title.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    }
-
-    setFilteredItems(filtered);
-  }, [stockData, filterBy, searchValue]);
+  };
 
   const isFocusWithin = useFocusWithin();
 
-  // Loading state
   if (loading) {
     return (
       <>
-        <SectionHero heading="JKT48 Game Stock Items" search={false} offer />
+        <SectionHero heading="JKT48 GAG Stock Inventory" search={false} offer />
         <ContainerWrapper>
-          <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
-            <CircularProgress size={60} />
-            <Typography variant="h6" sx={{ mt: 2, color: 'text.secondary' }}>
-              Loading stock data...
-            </Typography>
-          </Stack>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+            <Stack alignItems="center" spacing={2}>
+              <CircularProgress size={60} />
+              <Typography variant="h6" color="text.secondary">
+                Loading stock data...
+              </Typography>
+            </Stack>
+          </Box>
         </ContainerWrapper>
       </>
     );
   }
 
-  // Error state
   if (error) {
     return (
       <>
-        <SectionHero heading="JKT48 Game Stock Items" search={false} offer />
+        <SectionHero heading="JKT48 GAG Stock Inventory" search={false} offer />
         <ContainerWrapper>
-          <Stack sx={{ py: 6 }}>
-            <Alert severity="error" sx={{ mb: 3 }}>
-              Error loading stock data: {error}
-            </Alert>
-            <Button 
-              variant="contained" 
-              onClick={() => window.location.reload()}
-              sx={{ maxWidth: 200 }}
-            >
-              Retry
-            </Button>
-          </Stack>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+            <Stack alignItems="center" spacing={2}>
+              <Typography variant="h6" color="error">
+                Error: {error}
+              </Typography>
+              <Button variant="contained" onClick={fetchStockData}>
+                Retry
+              </Button>
+            </Stack>
+          </Box>
         </ContainerWrapper>
       </>
     );
@@ -215,61 +267,63 @@ export default function JKT48StockSections() {
 
   return (
     <>
-      <SectionHero heading="JKT48 Game Stock Items" search={false} offer />
+      <SectionHero heading="JKT48 GAG Stock Inventory" search={false} offer />
       <ContainerWrapper>
         <Stack sx={{ py: 6, gap: { xs: 3, sm: 4, md: 5 } }}>
-          {/* Stock Summary */}
-          {stockData && (
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Stock Summary
+          {/* Restock Timers */}
+          {Object.keys(restockTimers).length > 0 && (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+                Restock Timers
               </Typography>
               <Grid container spacing={2}>
-                {Object.entries(stockData).map(([key, items]) => {
-                  if (Array.isArray(items) && key.endsWith('Stock')) {
-                    const category = key.replace('Stock', '');
-                    const totalItems = items.reduce((sum, item) => sum + item.value, 0);
-                    return (
-                      <Grid key={key} size={{ xs: 6, sm: 4, md: 3 }}>
-                        <Box sx={{ 
-                          p: 2, 
-                          border: 1, 
-                          borderColor: 'divider', 
-                          borderRadius: 2,
-                          textAlign: 'center'
-                        }}>
-                          <Typography variant="h4">
-                            {getCategoryIcon(category.toLowerCase())}
-                          </Typography>
-                          <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-                            {category}
-                          </Typography>
-                          <Typography variant="h6" color="primary">
-                            {totalItems}
-                          </Typography>
-                        </Box>
-                      </Grid>
-                    );
-                  }
-                  return null;
-                })}
+                {Object.entries(restockTimers).map(([category, timer]) => (
+                  <Grid key={category} size={{ xs: 6, sm: 4, md: 2.4 }}>
+                    <Box
+                      sx={{
+                        p: 2,
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        border: 1,
+                        borderColor: 'divider',
+                        textAlign: 'center'
+                      }}
+                    >
+                      <Typography variant="subtitle2" sx={{ textTransform: 'capitalize', color: 'text.primary' }}>
+                        {category}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                        {formatTime(timer)}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                ))}
               </Grid>
             </Box>
           )}
 
-          {/* Search and Filter Controls */}
           <Stack
             direction={{ xs: 'column', md: 'row' }}
             sx={{ alignItems: 'center', justifyContent: 'space-between', gap: { xs: 2.5, md: 1.5 } }}
           >
-            <OutlinedInput
-              placeholder="Search for items... (e.g., Carrot, Watering Can, Egg)"
-              slotProps={{ input: { 'aria-label': 'Search items' } }}
-              sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
-              startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
-              onChange={handleSearchValue}
-              value={searchValue}
-            />
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+              <OutlinedInput
+                placeholder="Search for items... (e.g., Carrot, Watering Can, Common Egg)"
+                slotProps={{ input: { 'aria-label': 'Search items' } }}
+                sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
+                startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
+                onChange={handleSearchValue}
+              />
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={fetchStockData}
+                disabled={loading}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                Refresh
+              </Button>
+            </Stack>
             <Stack direction="row" sx={{ gap: 1.5, flexWrap: 'wrap' }}>
               {filterList.map((item, index) => (
                 <Button
@@ -281,7 +335,10 @@ export default function JKT48StockSections() {
                     whiteSpace: 'nowrap',
                     [theme.breakpoints.down('sm')]: { px: 1.5, py: 1 }
                   }}
-                  onClick={() => setFilterBy(item.value)}
+                  onClick={() => {
+                    setFilterBy(item.value);
+                    setFilterSections(item.value === '' ? sections : sections.filter((section) => section.category === item.value));
+                  }}
                 >
                   {item.title}
                 </Button>
@@ -289,16 +346,10 @@ export default function JKT48StockSections() {
             </Stack>
           </Stack>
 
-          {/* Results Count */}
-          <Typography variant="body2" color="text.secondary">
-            Showing {filteredItems.length} items
-          </Typography>
-
-          {/* Stock Items Grid */}
           <Grid container spacing={1.5}>
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
-                <Grid key={item.id} size={{ xs: 6, sm: 4, md: 4 }}>
+            {filterSections.length > 0 ? (
+              filterSections.map((item, index) => (
+                <Grid key={index} size={{ xs: 6, sm: 4, md: 4 }}>
                   <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
                     <motion.div
                       whileHover={{ scale: 1.02 }}
@@ -325,36 +376,22 @@ export default function JKT48StockSections() {
                         />
                         <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
-                          {item.image && item.image !== '/assets/images/placeholder.png' ? (
-                            <CardMedia
-                              component="img"
-                              image={item.image}
-                              sx={{ 
-                                px: '14.5%', 
-                                pt: '16%', 
-                                pb: { xs: 2, md: 1 }, 
-                                objectFit: 'contain',
-                                maxHeight: '60%'
-                              }}
-                              alt={item.title}
-                              loading="lazy"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
-                          ) : (
-                            <Box sx={{ 
+                          <CardMedia
+                            component="img"
+                            image={item.image}
+                            sx={{ 
                               px: '14.5%', 
                               pt: '16%', 
-                              pb: { xs: 2, md: 1 },
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '4rem'
-                            }}>
-                              {getCategoryIcon(item.category)}
-                            </Box>
-                          )}
+                              pb: { xs: 2, md: 1 }, 
+                              objectFit: 'contain',
+                              maxHeight: '60%'
+                            }}
+                            alt={item.title}
+                            loading="lazy"
+                            onError={(e) => {
+                              e.target.src = '/assets/images/placeholder.svg';
+                            }}
+                          />
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
                             <Wave />
                           </Box>
@@ -372,21 +409,29 @@ export default function JKT48StockSections() {
                             background: `linear-gradient(180deg, ${alpha(theme.palette.grey[100], 0)} 0%, ${theme.palette.grey[100]} 100%)`
                           }}
                         >
-                          <Typography variant="h5" sx={{ color: 'primary.main' }}>
+                          <Typography variant="h4" sx={{ color: 'primary.main' }}>
                             {item.title}
                           </Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             {item.subTitle}
                           </Typography>
-                          <Typography 
-                            variant="caption" 
-                            sx={{ 
-                              color: 'text.disabled',
-                              textTransform: 'capitalize'
-                            }}
-                          >
-                            {getCategoryIcon(item.category)} {item.category}
-                          </Typography>
+                          {item.stock > 0 && (
+                            <Box
+                              sx={{
+                                display: 'inline-flex',
+                                alignSelf: 'center',
+                                px: 2,
+                                py: 0.5,
+                                bgcolor: 'success.light',
+                                borderRadius: 1,
+                                mt: 1
+                              }}
+                            >
+                              <Typography variant="caption" sx={{ color: 'success.dark', fontWeight: 600 }}>
+                                In Stock
+                              </Typography>
+                            </Box>
+                          )}
                         </Stack>
                       </GraphicsCard>
                     </motion.div>
@@ -399,42 +444,13 @@ export default function JKT48StockSections() {
                   <Typography variant="h6" color="text.secondary">
                     No items found
                   </Typography>
-                  <Typography variant="body2" color="text.disabled" sx={{ mt: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                     Try adjusting your search or filter criteria
                   </Typography>
                 </Box>
               </Grid>
             )}
           </Grid>
-
-          {/* Restock Timers */}
-          {stockData?.restockTimers && (
-            <Box sx={{ mt: 4 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
-                Restock Timers
-              </Typography>
-              <Grid container spacing={2}>
-                {Object.entries(stockData.restockTimers).map(([category, timer]) => (
-                  <Grid key={category} size={{ xs: 6, sm: 4, md: 3 }}>
-                    <Box sx={{ 
-                      p: 2, 
-                      border: 1, 
-                      borderColor: 'divider', 
-                      borderRadius: 2,
-                      textAlign: 'center'
-                    }}>
-                      <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
-                        {category}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {Math.floor(timer / 1000)} seconds
-                      </Typography>
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
-          )}
         </Stack>
       </ContainerWrapper>
     </>
