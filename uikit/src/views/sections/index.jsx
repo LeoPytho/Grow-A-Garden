@@ -34,7 +34,7 @@ import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
 // Define the API endpoint
-const API_URL = 'https://v2.jkt48connect.my.id/api/growagarden/stock?apikey=JKTCONNECT';
+const API_URL = '/api/growagarden/stock';
 
 export default function Sections() {
 const theme = useTheme();
