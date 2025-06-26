@@ -171,7 +171,7 @@ export const feature20 = {
 export const feature21 = {
   heading: `Design Your Perfect Garden with In-Game Tools`,
   caption: 'Unlock creative tools for streamlined, scalable, and beautiful garden design within the game.',
-  image: '/assets/images/graphics/game/desktop1-light.svg',
+  image: '/assets/images/preview/IMG-20250626-WA0415.jpg',
   primaryBtn: { children: 'Start Designing Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps },
   secondaryBtn: {
     children: 'View Community Creations',
