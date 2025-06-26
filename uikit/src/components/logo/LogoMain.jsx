@@ -4,16 +4,18 @@
 import CardMedia from '@mui/material/CardMedia';
 
 // @project
-import branding from '@/branding.json';
+// Assuming your logo file is named 'logo.png' or similar and is in the 'public' folder or a subfolder like 'public/images'.
+// If your logo file is in './Logo/logo.png', adjust the path accordingly.
+import LogoImage from './logo.png'; // <--- UPDATED LINE
 
 /*************************** LOGO - MAIN  ***************************/
 
 export default function LogoMain() {
-  const logoMainPath = branding.logo.main;
+  // const logoMainPath = branding.logo.main; // <--- REMOVED LINE
 
   return (
     <CardMedia
-      src="https://cdn.jkt48connect.my.id/J-c7e74e4dlq9c.png"
+      src={LogoImage.src} // <--- UPDATED LINE
       component="img"
       alt="logo"
       sx={{ width: { xs: 112, lg: 140 } }}
