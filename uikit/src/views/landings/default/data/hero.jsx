@@ -96,7 +96,7 @@ export const hero = {
   primaryBtn: { children: 'View Stock', href: '/stock' },
   // --- Update these paths to reference the public directory ---
   videoSrc: '/VID-20250626-WA0381.mp4', // Directly reference from public folder
-  videoThumbnail: '/foto.png', // Directly reference from public folder
+  videoThumbnail: '/IMG-20250626-WA0384.jpg', // Directly reference from public folder
   // ----------------------------------------------------------
   listData: [
     { image: stockSvg, title: 'Current Stock' },
