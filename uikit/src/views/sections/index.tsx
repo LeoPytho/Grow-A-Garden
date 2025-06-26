@@ -7,7 +7,8 @@ import NextLink from 'next/link';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid2'; // Updated to Grid2
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
@@ -25,43 +26,24 @@ import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
 
 import useFocusWithin from '@/hooks/useFocusWithin';
+import { PAGE_PATH } from '@/path';
 import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
+// import GetImagePath from '@/utils/GetImagePath'; // Not needed anymore for this approach
 
 // @assets
 import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
-// Types
-interface StockItem {
-  name: string;
-  value: number;
-}
+var SectionCategory;
 
-interface ApiResponse {
-  gearStock?: StockItem[];
-  seedsStock?: StockItem[];
-  eggStock?: StockItem[];
-  honeyStock?: StockItem[];
-  cosmeticsStock?: StockItem[];
-  nightStock?: StockItem[];
-}
-
-interface Section {
-  title: string;
-  subTitle: string;
-  image: string;
-  link: string;
-  category: SectionCategory;
-}
-
-enum SectionCategory {
-  GEAR = 'gear',
-  SEEDS = 'seeds',
-  EGGS = 'eggs',
-  HONEY = 'honey',
-  COSMETICS = 'cosmetics',
-  NIGHT = 'night'
-}
+(function (SectionCategory) {
+  SectionCategory['GEAR'] = 'gear';
+  SectionCategory['SEEDS'] = 'seeds';
+  SectionCategory['EGGS'] = 'eggs';
+  SectionCategory['HONEY'] = 'honey';
+  SectionCategory['COSMETICS'] = 'cosmetics';
+  SectionCategory['NIGHT'] = 'night';
+})(SectionCategory || (SectionCategory = {}));
 
 const filterList = [
   { title: 'All Items', value: '' },
@@ -73,9 +55,19 @@ const filterList = [
   { title: 'Night Stock', value: SectionCategory.NIGHT }
 ];
 
-// New image mapping
-const itemImageMap: Record<string, string> = {
-  // Fruits/Plants
+// Default fallback images for each category using data URLs (always work)
+const defaultImages = {
+  [SectionCategory.GEAR]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNENBRjUwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R0VBUjwvdGV4dD4KPC9zdmc+',
+  [SectionCategory.SEEDS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjOEJDMzRBIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U0VFRFM8L3RleHQ+CjwvZz4KPC9zdmc+',
+  [SectionCategory.EGGS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkZDMTA3Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RUdHUzwvdGV4dD4KPC9zdmc+',
+  [SectionCategory.HONEY]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY5ODAwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SE9ORVk8L3RleHQ+CjwvZz4KPC9zdmc+',
+  [SectionCategory.COSMETICS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRTkxRTYzIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Q09TTUV0SUNTPC90ZXh0Pgo8L2c+PC9zdmc+',
+  [SectionCategory.NIGHT]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjM0Y1MUI1Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TklHSFQ8L3RleHQ+CjwvZz4KPC9zdmc+'
+};
+
+// Mapping of item names to their corresponding image file names
+const itemImageMap = {
+  // Seeds & Fruits
   'carrot': 'Carrot.png',
   'strawberry': 'Strawberry.png',
   'blueberry': 'Blueberry.png',
@@ -197,8 +189,8 @@ const itemImageMap: Record<string, string> = {
 
   // Seed Packs
   'night seed pack': 'Night-Seed-Pack.png',
-  'seed pack': 'Seed-Pack.png',
-  'seeds': 'Seed-Pack.png',
+  'seed pack': 'Seed-Pack.png', // Assuming a generic seed pack image
+  'seeds': 'Seed-Pack.png', // Assuming a generic seeds image
 
   // Cosmetics
   'twilight crate': 'Twilight-Crate.png',
@@ -266,7 +258,7 @@ const itemImageMap: Record<string, string> = {
   'viney ring walkway': 'Viney-Ring-Walkway.png',
   'square metal arbour': 'Square-Metal-Arbour.png',
   'small stone lantern': 'Small-Stone-Lantern.png',
-  'hay bail': 'Hay-Bale.png',
+  'hay bail': 'Hay-Bale.png', // Corrected 'hay bale' to 'hay bail' if it's the actual name in data
   'long stone table': 'Long-Stone-Table.png',
   'medium stone table': 'Medium-Stone-Table.png',
   'metal wind chime': 'Metal-Wind-Chime.png',
@@ -277,165 +269,111 @@ const itemImageMap: Record<string, string> = {
   'yellow umbrella': 'Yellow-Umbrella.png'
 };
 
-// Function to get image path for an item
-const getImageForItem = (itemName: string, category: SectionCategory): string => {
-  const normalizedName = itemName.toLowerCase().trim();
-  const imageFileName = itemImageMap[normalizedName];
-
-  // If a specific image exists, use it. Otherwise, use a default image based on category.
-  if (imageFileName) {
-    return `/assets/images/gag/${imageFileName}`;
-  }
-
-  // Fallback images
-  switch (category) {
-    case SectionCategory.GEAR:
-      return '/assets/images/gag/Default-Gear.png';
-    case SectionCategory.SEEDS:
-      return '/assets/images/gag/Default-Seed.png';
-    case SectionCategory.EGGS:
-      return '/assets/images/gag/Default-Egg.png';
-    case SectionCategory.HONEY:
-      return '/assets/images/gag/Default-Honey.png';
-    case SectionCategory.COSMETICS:
-      return '/assets/images/gag/Default-Cosmetic.png';
-    case SectionCategory.NIGHT:
-      return '/assets/images/gag/Default-Night.png';
-    default:
-      return '/assets/images/gag/Default-Item.png';
-  }
-};
-
 /*************************** SECTIONS LAYOUT  ***************************/
 
 export default function Sections() {
   const theme = useTheme();
-  const [filterBy, setFilterBy] = useState<string>('');
-  const [sections, setSections] = useState<Section[]>([]);
-  const [filterSections, setFilterSections] = useState<Section[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Debug: Add console logs
-  useEffect(() => {
-    console.log('Component mounted, starting data fetch...');
-  }, []);
+  const [filterBy, setFilterBy] = useState('');
+  const [sections, setSections] = useState([]);
+  const [filterSections, setFilterSections] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Fetching data from API...');
         setLoading(true);
-        setError(null);
-        
         const response = await fetch('/api/growagarden/stock');
-        console.log('API Response status:', response.status);
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+          throw new Error('Failed to fetch data');
         }
 
-        const data: ApiResponse = await response.json();
-        console.log('API Data received:', data);
+        const data = await response.json();
 
         // Transform API data to match the expected structure
-        const transformedSections: Section[] = [];
+        const transformedSections = [];
 
-        // Transform each stock category with better error handling
-        if (data.gearStock && Array.isArray(data.gearStock)) {
+        // Transform each stock category
+        if (data.gearStock) {
           data.gearStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.GEAR),
-                link: `#gear-${index}`,
-                category: SectionCategory.GEAR
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.GEAR), // Pass item.name instead of item.image
+              link: `#gear-${index}`,
+              category: SectionCategory.GEAR
+            });
           });
         }
 
-        if (data.seedsStock && Array.isArray(data.seedsStock)) {
+        if (data.seedsStock) {
           data.seedsStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.SEEDS),
-                link: `#seeds-${index}`,
-                category: SectionCategory.SEEDS
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.SEEDS), // Pass item.name
+              link: `#seeds-${index}`,
+              category: SectionCategory.SEEDS
+            });
           });
         }
 
-        if (data.eggStock && Array.isArray(data.eggStock)) {
+        if (data.eggStock) {
           data.eggStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.EGGS),
-                link: `#eggs-${index}`,
-                category: SectionCategory.EGGS
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.EGGS), // Pass item.name
+              link: `#eggs-${index}`,
+              category: SectionCategory.EGGS
+            });
           });
         }
 
-        if (data.honeyStock && Array.isArray(data.honeyStock)) {
+        if (data.honeyStock) {
           data.honeyStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.HONEY),
-                link: `#honey-${index}`,
-                category: SectionCategory.HONEY
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.HONEY), // Pass item.name
+              link: `#honey-${index}`,
+              category: SectionCategory.HONEY
+            });
           });
         }
 
-        if (data.cosmeticsStock && Array.isArray(data.cosmeticsStock)) {
+        if (data.cosmeticsStock) {
           data.cosmeticsStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.COSMETICS),
-                link: `#cosmetics-${index}`,
-                category: SectionCategory.COSMETICS
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.COSMETICS), // Pass item.name
+              link: `#cosmetics-${index}`,
+              category: SectionCategory.COSMETICS
+            });
           });
         }
 
-        if (data.nightStock && Array.isArray(data.nightStock)) {
+        if (data.nightStock) {
           data.nightStock.forEach((item, index) => {
-            if (item.name && typeof item.value !== 'undefined') {
-              transformedSections.push({
-                title: item.name,
-                subTitle: `${item.value} in stock`,
-                image: getImageForItem(item.name, SectionCategory.NIGHT),
-                link: `#night-${index}`,
-                category: SectionCategory.NIGHT
-              });
-            }
+            transformedSections.push({
+              title: item.name,
+              subTitle: `${item.value} in stock`,
+              image: getImageSrc(item.name, SectionCategory.NIGHT), // Pass item.name
+              link: `#night-${index}`,
+              category: SectionCategory.NIGHT
+            });
           });
         }
 
-        console.log('Transformed sections:', transformedSections);
         setSections(transformedSections);
         setFilterSections(transformedSections);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-        setError(errorMessage);
+        setError(err.message);
         setLoading(false);
       }
     };
@@ -443,34 +381,43 @@ export default function Sections() {
     fetchData();
   }, []);
 
-  const handleSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchValue = (event) => {
     const search = event.target.value.trim().toLowerCase();
     setSearchValue(search);
   };
 
   useEffect(() => {
-    console.log('Filtering sections. Search:', searchValue, 'FilterBy:', filterBy);
-    let newData = sections;
-
-    // Apply category filter first
-    if (filterBy) {
-      newData = newData.filter((section) => section.category === filterBy);
-    }
-
-    // Apply search filter
-    if (searchValue) {
-      newData = newData.filter((section) => 
-        section.title.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    }
-
-    console.log('Filtered results:', newData);
+    const newData = sections.filter((value) => {
+      if (searchValue) {
+        return value.title.toLowerCase().includes(searchValue.toLowerCase());
+      } else {
+        return value;
+      }
+    });
     setFilterSections(newData);
-  }, [searchValue, filterBy, sections]);
+  }, [searchValue, sections]);
+
+  /**
+   * Generates the image source based on the item name and category.
+   * Prioritizes local images from the itemImageMap, falling back to default category images.
+   * @param {string} itemName The name of the item from the API.
+   * @param {SectionCategory} category The category of the item.
+   * @returns {string} The image source URL.
+   */
+  const getImageSrc = (itemName, category) => {
+    const normalizedItemName = itemName.toLowerCase();
+    const imageFileName = itemImageMap[normalizedItemName];
+
+    if (imageFileName) {
+      return `/assets/images/gag/${imageFileName}`;
+    }
+
+    // Fallback to category-specific default image if no specific image is found
+    return defaultImages[category];
+  };
 
   const isFocusWithin = useFocusWithin();
 
-  // Early return for loading state
   if (loading) {
     return (
       <>
@@ -487,7 +434,6 @@ export default function Sections() {
     );
   }
 
-  // Early return for error state
   if (error) {
     return (
       <>
@@ -505,8 +451,6 @@ export default function Sections() {
       </>
     );
   }
-
-  console.log('Rendering main component. Sections count:', filterSections.length);
 
   return (
     <>
@@ -537,8 +481,10 @@ export default function Sections() {
                     [theme.breakpoints.down('sm')]: { px: 1.5, py: 1 }
                   }}
                   onClick={() => {
-                    console.log('Filter clicked:', item.value);
                     setFilterBy(item.value);
+                    setFilterSections(
+                      item.value === '' ? sections : sections.filter((section) => section.category === item.value)
+                    );
                   }}
                 >
                   {item.title}
@@ -552,32 +498,27 @@ export default function Sections() {
               <Typography variant="h6" color="text.secondary">
                 {searchValue ? `No items found for "${searchValue}"` : 'No items available'}
               </Typography>
-              {sections.length > 0 && (
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Try adjusting your search or filter criteria
-                </Typography>
-              )}
             </Stack>
           ) : (
             <Grid container spacing={1.5}>
               {filterSections.map((item, index) => (
-                <Grid key={`${item.category}-${index}`} size={{ xs: 6, sm: 4, md: 4 }}>
+                <Grid key={index} size={{ xs: 6, sm: 4, md: 4 }}>
                   <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       initial={{ opacity: 0, y: 25 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5 }}
+                      transition={{
+                        duration: 0.5
+                      }}
                     >
                       <GraphicsCard
                         sx={{
                           height: { xs: 240, sm: 324, md: 380 },
                           position: 'relative',
                           overflow: 'hidden',
-                          ...(isFocusWithin && { 
-                            '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) 
-                          })
+                          ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })
                         }}
                       >
                         <Link
@@ -600,11 +541,10 @@ export default function Sections() {
                               px: '14.5%',
                               pt: '16%',
                               pb: { xs: 2, md: 1 },
+                              maxHeight: '60%',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'center',
-                              height: '60%',
-                              overflow: 'hidden'
+                              justifyContent: 'center'
                             }}
                           >
                             <img
@@ -613,14 +553,17 @@ export default function Sections() {
                               style={{
                                 maxWidth: '100%',
                                 maxHeight: '100%',
-                                objectFit: 'contain',
-                                userSelect: 'none',
-                                pointerEvents: 'none'
+                                objectFit: 'contain'
                               }}
+                              loading="lazy"
                               onError={(e) => {
-                                console.error('Image failed to load:', item.image);
-                                // Fallback to a generic image or hide the image
-                                e.currentTarget.style.display = 'none';
+                                // Fallback to category-specific placeholder if image fails to load
+                                const category = item.category;
+                                e.target.src = defaultImages[category];
+                              }}
+                              onLoad={(e) => {
+                                // Hide any loading indicator if you have one
+                                e.target.style.opacity = '1';
                               }}
                             />
                           </Box>
