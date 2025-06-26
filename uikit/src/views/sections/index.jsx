@@ -14,9 +14,12 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 // @third-party
 import { motion } from 'framer-motion';
+const jkt48Api = require('@jkt48/core');
 
 // @project
 import ContainerWrapper from '@/components/ContainerWrapper';
@@ -33,129 +36,179 @@ import GetImagePath from '@/utils/GetImagePath';
 import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
-// Import the jkt48Api module
-import jkt48Api from '@jkt48/core';
+var StockCategory;
 
-// Define SectionCategory as it was in your original code
-var SectionCategory;
+(function (StockCategory) {
+  StockCategory['SEEDS'] = 'seedsStock';
+  StockCategory['GEARS'] = 'gearStock';
+  StockCategory['EGGS'] = 'eggStock';
+  StockCategory['HONEY'] = 'honeyStock';
+  StockCategory['COSMETICS'] = 'cosmeticsStock';
+  StockCategory['EASTER'] = 'easterStock';
+  StockCategory['NIGHT'] = 'nightStock';
+})(StockCategory || (StockCategory = {}));
 
-(function (SectionCategory) {
-  SectionCategory['ESSENTIAL'] = 'essential';
-  SectionCategory['MARKETING'] = 'marketing';
-  SectionCategory['FEATURE'] = 'feature';
-})(SectionCategory || (SectionCategory = {}));
+const filterList = [
+  { title: 'All Stock', value: '' },
+  { title: 'Seeds', value: StockCategory.SEEDS },
+  { title: 'Gears', value: StockCategory.GEARS },
+  { title: 'Eggs', value: StockCategory.EGGS },
+  { title: 'Honey', value: StockCategory.HONEY },
+  { title: 'Cosmetics', value: StockCategory.COSMETICS },
+  { title: 'Easter', value: StockCategory.EASTER },
+  { title: 'Night', value: StockCategory.NIGHT }
+];
 
-const imagePrefix = '/assets/images/presentation';
-
-/*************************** SECTIONS LAYOUT  ***************************/
+/***************************  SECTIONS LAYOUT  ***************************/
 
 export default function Sections() {
   const theme = useTheme();
   const [filterBy, setFilterBy] = useState('');
-  // Initialize filterSections with an empty array as data will be fetched
+  const [allStockItems, setAllStockItems] = useState([]);
   const [filterSections, setFilterSections] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  // New state to store raw stock data from the API
-  const [stockData, setStockData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [stockData, setStockData] = useState(null);
 
-  // Function to transform API data into the format your component expects
-  const transformStockData = (data) => {
-    const transformed = [];
-    // Iterate through each category in the stock data
-    for (const category in data) {
-      if (Array.isArray(data[category])) {
-        data[category].forEach((item) => {
-          transformed.push({
+  // Function to fetch stock data from JKT48 API
+  const fetchStockData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const apiKey = 'JKTCONNECT';
+      const stock = await jkt48Api.gag.getStock(apiKey);
+      
+      setStockData(stock);
+      
+      // Transform stock data into sections format
+      const transformedSections = [];
+      
+      Object.entries(stock).forEach(([categoryKey, items]) => {
+        // Skip non-stock categories
+        if (!categoryKey.includes('Stock') || !Array.isArray(items)) return;
+        
+        items.forEach((item, index) => {
+          transformedSections.push({
+            id: `${categoryKey}-${index}`,
             title: item.name,
-            subTitle: `${item.value || 0} In Stock`, // Display stock quantity
-            image: item.image || `${imagePrefix}/default-item.svg`, // Use a default image if none is provided
-            // You might want to define a specific link for each item if applicable,
-            // or just use a generic link or prevent navigation if there's no specific page
-            link: PAGE_PATH.other, // Placeholder link, adjust as needed
-            category: SectionCategory.FEATURE, // Categorize as FEATURE or create new categories if needed
+            subTitle: `Quantity: ${item.value}`,
+            image: item.image || '/assets/images/presentation/default-item.svg',
+            link: `#${categoryKey}/${item.name.toLowerCase().replace(/\s+/g, '-')}`,
+            category: categoryKey,
+            value: item.value,
+            originalData: item
           });
         });
-      }
+      });
+      
+      setAllStockItems(transformedSections);
+      setFilterSections(transformedSections);
+      
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      setError(error.message || 'Failed to fetch stock data');
+    } finally {
+      setLoading(false);
     }
-    return transformed;
   };
 
+  // Initial data fetch
   useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const apiKey = 'JKTCONNECT'; // Your API key
-        const data = await jkt48Api.gag.getStock(apiKey);
-        setStockData(data);
-        // Transform and set initial filtered sections
-        const transformed = transformStockData(data);
-        setFilterSections(transformed);
-      } catch (err) {
-        console.error('Failed to fetch JKT48 stock data:', err.message);
-        setError('Failed to load stock data. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchStockData();
-  }, []); // Run once on component mount
-
-  useEffect(() => {
-    // Filter logic based on searchValue and filterBy
-    const allTransformedSections = transformStockData(stockData); // Re-transform if stockData changes or for fresh filtering
-
-    const newData = allTransformedSections.filter((value) => {
-      const matchesSearch = searchValue
-        ? value.title.toLowerCase().includes(searchValue.toLowerCase())
-        : true;
-      const matchesCategory = filterBy ? value.category === filterBy : true;
-      return matchesSearch && matchesCategory;
-    });
-    setFilterSections(newData);
-  }, [searchValue, filterBy, stockData]); // Re-run when searchValue, filterBy, or stockData changes
+  }, []);
 
   const handleSearchValue = (event) => {
     const search = event.target.value.trim().toLowerCase();
     setSearchValue(search);
   };
 
+  // Filter sections based on search and category
+  useEffect(() => {
+    let filteredData = allStockItems;
+    
+    // Apply category filter
+    if (filterBy) {
+      filteredData = filteredData.filter(item => item.category === filterBy);
+    }
+    
+    // Apply search filter
+    if (searchValue) {
+      filteredData = filteredData.filter(item => 
+        item.title.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+    
+    setFilterSections(filteredData);
+  }, [searchValue, filterBy, allStockItems]);
+
   const isFocusWithin = useFocusWithin();
 
-  // Filter list for buttons (unchanged as per your original request)
-  const filterList = [
-    { title: 'All Section', value: '' },
-    { title: 'Marketing', value: SectionCategory.MARKETING },
-    { title: 'Feature', value: SectionCategory.FEATURE },
-    { title: 'Essential', value: SectionCategory.ESSENTIAL },
-  ];
+  // Format category name for display
+  const formatCategoryName = (category) => {
+    return category.replace('Stock', '').replace(/([A-Z])/g, ' $1').trim();
+  };
+
+  // Get stock summary
+  const getStockSummary = () => {
+    if (!stockData) return '';
+    
+    const totalItems = Object.values(stockData)
+      .filter(value => Array.isArray(value))
+      .reduce((total, items) => total + items.length, 0);
+    
+    return `${totalItems} items across ${Object.keys(stockData).filter(key => key.includes('Stock')).length} categories`;
+  };
 
   if (loading) {
     return (
-      <ContainerWrapper>
-        <Typography variant="h5" sx={{ textAlign: 'center', py: 6 }}>
-          Loading stock data...
-        </Typography>
-      </ContainerWrapper>
+      <>
+        <SectionHero heading="JKT48 GAG Stock Inventory" search={false} offer />
+        <ContainerWrapper>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 10 }}>
+            <Stack spacing={2} alignItems="center">
+              <CircularProgress size={60} />
+              <Typography variant="h6" color="text.secondary">
+                Loading stock data...
+              </Typography>
+            </Stack>
+          </Box>
+        </ContainerWrapper>
+      </>
     );
   }
 
   if (error) {
     return (
-      <ContainerWrapper>
-        <Typography variant="h5" color="error" sx={{ textAlign: 'center', py: 6 }}>
-          {error}
-        </Typography>
-      </ContainerWrapper>
+      <>
+        <SectionHero heading="JKT48 GAG Stock Inventory" search={false} offer />
+        <ContainerWrapper>
+          <Box sx={{ py: 6 }}>
+            <Alert 
+              severity="error" 
+              action={
+                <Button color="inherit" size="small" onClick={fetchStockData}>
+                  Retry
+                </Button>
+              }
+            >
+              Error: {error}
+            </Alert>
+          </Box>
+        </ContainerWrapper>
+      </>
     );
   }
 
   return (
     <>
-      <SectionHero heading="Explore JKT48 Merchandise Stock" search={false} offer />
+      <SectionHero 
+        heading="JKT48 GAG Stock Inventory" 
+        subheading={getStockSummary()}
+        search={false} 
+        offer 
+      />
       <ContainerWrapper>
         <Stack sx={{ py: 6, gap: { xs: 3, sm: 4, md: 5 } }}>
           <Stack
@@ -163,12 +216,12 @@ export default function Sections() {
             sx={{ alignItems: 'center', justifyContent: 'space-between', gap: { xs: 2.5, md: 1.5 } }}
           >
             <OutlinedInput
-              placeholder="Search for items... (e.g., Recall Wrench, Carrot)"
-              slotProps={{ input: { 'aria-label': 'Search items' } }}
+              placeholder="Search for items... (e.g., Carrot, Watering Can, Egg)"
+              slotProps={{ input: { 'aria-label': 'Search stock items' } }}
               sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
               startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
               onChange={handleSearchValue}
-              value={searchValue} // Make input controlled
+              value={searchValue}
             />
             <Stack direction="row" sx={{ gap: 1.5, flexWrap: 'wrap' }}>
               {filterList.map((item, index) => (
@@ -183,7 +236,6 @@ export default function Sections() {
                   }}
                   onClick={() => {
                     setFilterBy(item.value);
-                    // Filtering will now be handled by the useEffect that depends on filterBy and stockData
                   }}
                 >
                   {item.title}
@@ -191,80 +243,129 @@ export default function Sections() {
               ))}
             </Stack>
           </Stack>
+
+          {/* Refresh Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              {filterSections.length} items found
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={fetchStockData}
+              startIcon={<SvgIcon name="tabler-refresh" />}
+            >
+              Refresh Stock
+            </Button>
+          </Box>
+
           <Grid container spacing={1.5}>
-            {filterSections.length > 0 ? (
-              filterSections.map((item, index) => (
-                <Grid item key={index} xs={6} sm={4} md={4}>
-                  <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      initial={{ opacity: 0, y: 25 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 0.5
+            {filterSections.map((item, index) => (
+              <Grid key={item.id || index} size={{ xs: 6, sm: 4, md: 4 }}>
+                <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.5,
+                      delay: index * 0.05
+                    }}
+                  >
+                    <GraphicsCard
+                      sx={{
+                        height: { xs: 240, sm: 324, md: 380 },
+                        position: 'relative',
+                        overflow: 'hidden',
+                        ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })
                       }}
                     >
-                      <GraphicsCard
-                        sx={{
-                          height: { xs: 240, sm: 324, md: 380 },
-                          position: 'relative',
-                          overflow: 'hidden',
-                          ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })
-                        }}
-                      >
-                        <Link
-                          href={item.link}
-                          component={NextLink}
-                          aria-label={item.title}
-                          sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}
-                        />
-                        <Background />
-                        <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
+                      <Link
+                        href={item.link}
+                        component={NextLink}
+                        aria-label={item.title}
+                        sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}
+                      />
+                      <Background />
+                      <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
+                        {item.image && item.image !== '/assets/images/presentation/default-item.svg' ? (
                           <CardMedia
                             component="img"
-                            image={item.image} // Use item.image directly as it's already a full URL or path
-                            sx={{ px: '14.5%', pt: '16%', pb: { xs: 2, md: 1 }, objectFit: 'contain' }}
+                            image={item.image}
+                            sx={{ 
+                              px: '14.5%', 
+                              pt: '16%', 
+                              pb: { xs: 2, md: 1 }, 
+                              objectFit: 'contain',
+                              maxHeight: '60%'
+                            }}
                             alt={item.title}
                             loading="lazy"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
                           />
-                          <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
-                            <Wave />
+                        ) : (
+                          <Box
+                            sx={{
+                              px: '14.5%',
+                              pt: '16%',
+                              pb: { xs: 2, md: 1 },
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              height: '60%',
+                              color: 'grey.400'
+                            }}
+                          >
+                            <SvgIcon name="tabler-package" size={48} />
                           </Box>
+                        )}
+                        <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
+                          <Wave />
                         </Box>
-                        <Stack
-                          sx={{
-                            height: 177,
-                            bottom: 0,
-                            width: 1,
-                            position: 'absolute',
-                            justifyContent: 'end',
-                            textAlign: 'center',
-                            gap: { xs: 0.25, md: 0.5, sm: 1 },
-                            p: 3,
-                            background: `linear-gradient(180deg, ${alpha(theme.palette.grey[100], 0)} 0%, ${theme.palette.grey[100]} 100%)`
-                          }}
-                        >
-                          <Typography variant="h4" sx={{ color: 'primary.main' }}>
-                            {item.title}
-                          </Typography>
-                          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {item.subTitle}
-                          </Typography>
-                        </Stack>
-                      </GraphicsCard>
-                    </motion.div>
-                  </GraphicsCard>
-                </Grid>
-              ))
-            ) : (
-              <Grid item xs={12}>
-                <Typography variant="h6" sx={{ textAlign: 'center', mt: 4 }}>
-                  No items found matching your criteria.
-                </Typography>
+                      </Box>
+                      <Stack
+                        sx={{
+                          height: 177,
+                          bottom: 0,
+                          width: 1,
+                          position: 'absolute',
+                          justifyContent: 'end',
+                          textAlign: 'center',
+                          gap: { xs: 0.25, md: 0.5, sm: 1 },
+                          p: 3,
+                          background: `linear-gradient(180deg, ${alpha(theme.palette.grey[100], 0)} 0%, ${theme.palette.grey[100]} 100%)`
+                        }}
+                      >
+                        <Typography variant="h4" sx={{ color: 'primary.main' }}>
+                          {item.title}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          {item.subTitle}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                          {formatCategoryName(item.category)}
+                        </Typography>
+                      </Stack>
+                    </GraphicsCard>
+                  </motion.div>
+                </GraphicsCard>
               </Grid>
-            )}
+            ))}
           </Grid>
+
+          {filterSections.length === 0 && !loading && (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Typography variant="h6" color="text.secondary">
+                No items found
+              </Typography>
+              <Typography variant="body2" color="text.disabled" sx={{ mt: 1 }}>
+                Try adjusting your search or filter criteria
+              </Typography>
+            </Box>
+          )}
         </Stack>
       </ContainerWrapper>
     </>
