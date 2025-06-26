@@ -8,7 +8,7 @@ import { SECTION_PATH } from '@/path';
 
 // --- Import your local video and image files ---
 import gameTrailerVideo from './VID-20250626-WA0381.mp4';
-import gameTrailerThumbnail from './foto.png';
+import gameTrailerThumbnail from './IMG-20250626-WA0384.jpg';
 // -------------------------------------------------
 
 // Helper function to create a simple SVG data URI
