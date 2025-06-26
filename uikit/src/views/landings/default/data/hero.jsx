@@ -6,6 +6,11 @@ import Typography from '@mui/material/Typography';
 // or you might want to replace it with a direct game link later.
 import { SECTION_PATH } from '@/path';
 
+// --- Import your local video and image files ---
+import gameTrailerVideo from './VID-20250626-WA0381.mp4';
+import gameTrailerThumbnail from './foto.png';
+// -------------------------------------------------
+
 // Helper function to create a simple SVG data URI
 const createSvgDataUri = (svgContent) => {
   const encodedSvg = encodeURIComponent(svgContent)
@@ -15,8 +20,6 @@ const createSvgDataUri = (svgContent) => {
 };
 
 // Custom SVGs for the website info
-// You might want to get new SVGs or adapt existing ones for weather, stock, and time.
-// For now, I'll repurpose some, but ideally, you'd find more suitable icons.
 const plantGrowthSvg = createSvgDataUri(`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
@@ -61,7 +64,6 @@ const communitySvg = createSvgDataUri(`
   </svg>
 `);
 
-
 export const hero = {
   chip: {
     label: (
@@ -79,7 +81,7 @@ export const hero = {
           icon={
             <CardMedia
               component="img"
-              image={plantGrowthSvg} // Using a more general "plant growth" icon
+              image={plantGrowthSvg}
               sx={{ width: 16, height: 16 }}
               alt="plant growth icon"
               loading="lazy"
@@ -91,17 +93,16 @@ export const hero = {
   },
   headLine: 'Real-time Info for Your Grow A Garden Adventure',
   captionLine: 'Stay updated on in-game stock, current weather, and precise restock times to optimize your gardening strategy!',
-  // The primary button might now link to an "Information Dashboard" or similar
   primaryBtn: { children: 'View Stock', href: '/stock' },
-  // These might be screenshots or illustrative videos of the game interface showing relevant data
-  videoSrc: 'YOUR_INFORMATION_OVERVIEW_VIDEO_LINK_HERE',
-  videoThumbnail: 'YOUR_INFORMATION_OVERVIEW_THUMBNAIL_HERE',
+  // --- Using imported local media files ---
+  videoSrc: gameTrailerVideo,
+  videoThumbnail: gameTrailerThumbnail,
+  // ----------------------------------------
   listData: [
-    { image: stockSvg, title: 'Current Stock' /* This would be dynamically updated with real stock data */ },
-    { image: weatherSvg, title: 'In-Game Weather' /* This would be dynamically updated with real-time weather */ },
-    { image: restockSvg, title: 'Next Restock' /* This would be dynamically updated with restock times */ },
+    { image: stockSvg, title: 'Current Stock' },
+    { image: weatherSvg, title: 'In-Game Weather' },
+    { image: restockSvg, title: 'Next Restock' },
     { image: communitySvg, title: 'Community Insights' },
     { image: plantGrowthSvg, title: 'Gardening Tips' },
   ]
 };
-
