@@ -55,14 +55,14 @@ const filterList = [
   { title: 'Night Stock', value: SectionCategory.NIGHT }
 ];
 
-// Default fallback images for each category
+// Default fallback images for each category using data URLs (always work)
 const defaultImages = {
-  [SectionCategory.GEAR]: 'https://via.placeholder.com/150x150/4CAF50/white?text=GEAR',
-  [SectionCategory.SEEDS]: 'https://via.placeholder.com/150x150/8BC34A/white?text=SEEDS',
-  [SectionCategory.EGGS]: 'https://via.placeholder.com/150x150/FFC107/white?text=EGGS',
-  [SectionCategory.HONEY]: 'https://via.placeholder.com/150x150/FF9800/white?text=HONEY',
-  [SectionCategory.COSMETICS]: 'https://via.placeholder.com/150x150/E91E63/white?text=COSMETICS',
-  [SectionCategory.NIGHT]: 'https://via.placeholder.com/150x150/3F51B5/white?text=NIGHT'
+  [SectionCategory.GEAR]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNENBRjUwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R0VBUjwvdGV4dD4KPC9zdmc+',
+  [SectionCategory.SEEDS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjOEJDMzRBIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U0VFRFM8L3RleHQ+CjwvZz4KPC9zdmc+',
+  [SectionCategory.EGGS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkZDMTA3Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RUdHUzwvdGV4dD4KPC9zdmc+',
+  [SectionCategory.HONEY]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY5ODAwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SE9ORVk8L3RleHQ+CjwvZz4KPC9zdmc+',
+  [SectionCategory.COSMETICS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRTkxRTYzIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Q09TTUV0SUNTPC90ZXh0Pgo8L3N2Zz4=',
+  [SectionCategory.NIGHT]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjM0Y1MUI1Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TklHSFQ8L3RleHQ+CjwvZz4KPC9zdmc+'
 };
 
 /***************************  SECTIONS LAYOUT  ***************************/
@@ -98,7 +98,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.GEAR],
+              image: getImageSrc(item.image, SectionCategory.GEAR),
               link: `#gear-${index}`,
               category: SectionCategory.GEAR
             });
@@ -110,7 +110,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.SEEDS],
+              image: getImageSrc(item.image, SectionCategory.SEEDS),
               link: `#seeds-${index}`,
               category: SectionCategory.SEEDS
             });
@@ -122,7 +122,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.EGGS],
+              image: getImageSrc(item.image, SectionCategory.EGGS),
               link: `#eggs-${index}`,
               category: SectionCategory.EGGS
             });
@@ -134,7 +134,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.HONEY],
+              image: getImageSrc(item.image, SectionCategory.HONEY),
               link: `#honey-${index}`,
               category: SectionCategory.HONEY
             });
@@ -146,7 +146,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.COSMETICS],
+              image: getImageSrc(item.image, SectionCategory.COSMETICS),
               link: `#cosmetics-${index}`,
               category: SectionCategory.COSMETICS
             });
@@ -158,7 +158,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || defaultImages[SectionCategory.NIGHT],
+              image: getImageSrc(item.image, SectionCategory.NIGHT),
               link: `#night-${index}`,
               category: SectionCategory.NIGHT
             });
@@ -192,6 +192,25 @@ export default function Sections() {
     });
     setFilterSections(newData);
   }, [searchValue, sections]);
+
+  // Function to handle image loading with proxy for external images
+  const getImageSrc = (originalSrc, category) => {
+    if (!originalSrc) {
+      return defaultImages[category];
+    }
+    
+    // Check if it's an external image (postimg.cc, etc.)
+    if (originalSrc.startsWith('http') && !originalSrc.includes(window.location.hostname)) {
+      // Option 1: Use a proxy service (more reliable)
+      return `https://images.weserv.nl/?url=${encodeURIComponent(originalSrc)}`;
+      
+      // Option 2: Alternative proxy services (uncomment if the above doesn't work)
+      // return `https://cors-anywhere.herokuapp.com/${originalSrc}`;
+      // return `/api/proxy-image?url=${encodeURIComponent(originalSrc)}`;
+    }
+    
+    return originalSrc;
+  };
 
   const isFocusWithin = useFocusWithin();
 
@@ -313,18 +332,37 @@ export default function Sections() {
                         />
                         <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
-                          <CardMedia
-                            component="img"
-                            image={item.image}
-                            sx={{ px: '14.5%', pt: '16%', pb: { xs: 2, md: 1 }, objectFit: 'contain', maxHeight: '60%' }}
-                            alt={item.title}
-                            loading="lazy"
-                            onError={(e) => {
-                              // Fallback to category-specific placeholder if image fails to load
-                              const category = item.category;
-                              e.target.src = defaultImages[category] || 'https://via.placeholder.com/150x150/gray/white?text=NO+IMAGE';
+                          <Box
+                            sx={{
+                              px: '14.5%',
+                              pt: '16%',
+                              pb: { xs: 2, md: 1 },
+                              maxHeight: '60%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
                             }}
-                          />
+                          >
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              style={{
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                objectFit: 'contain'
+                              }}
+                              loading="lazy"
+                              onError={(e) => {
+                                // Fallback to category-specific placeholder if image fails to load
+                                const category = item.category;
+                                e.target.src = defaultImages[category];
+                              }}
+                              onLoad={(e) => {
+                                // Hide any loading indicator if you have one
+                                e.target.style.opacity = '1';
+                              }}
+                            />
+                          </Box>
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
                             <Wave />
                           </Box>
