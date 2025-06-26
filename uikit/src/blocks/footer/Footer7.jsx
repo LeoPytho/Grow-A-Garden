@@ -90,7 +90,7 @@ export default function Footer7() {
         {process.env.NEXT_PUBLIC_VERSION}
       </Typography>
       <Typography variant="body2" sx={{ maxWidth: { sm: 280 } }}>
-        Explore the different versions of our {branding.brandName} template.
+        Explore the different versions of JKT48Connect project.
       </Typography>
     </Stack>
   );
