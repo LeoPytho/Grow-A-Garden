@@ -55,6 +55,16 @@ const filterList = [
   { title: 'Night Stock', value: SectionCategory.NIGHT }
 ];
 
+// Default fallback images for each category
+const defaultImages = {
+  [SectionCategory.GEAR]: 'https://via.placeholder.com/150x150/4CAF50/white?text=GEAR',
+  [SectionCategory.SEEDS]: 'https://via.placeholder.com/150x150/8BC34A/white?text=SEEDS',
+  [SectionCategory.EGGS]: 'https://via.placeholder.com/150x150/FFC107/white?text=EGGS',
+  [SectionCategory.HONEY]: 'https://via.placeholder.com/150x150/FF9800/white?text=HONEY',
+  [SectionCategory.COSMETICS]: 'https://via.placeholder.com/150x150/E91E63/white?text=COSMETICS',
+  [SectionCategory.NIGHT]: 'https://via.placeholder.com/150x150/3F51B5/white?text=NIGHT'
+};
+
 /***************************  SECTIONS LAYOUT  ***************************/
 
 export default function Sections() {
@@ -72,24 +82,24 @@ export default function Sections() {
       try {
         setLoading(true);
         const response = await fetch('/api/growagarden/stock');
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
-        
+
         const data = await response.json();
-        
+
         // Transform API data to match the expected structure
         const transformedSections = [];
-        
+
         // Transform each stock category
         if (data.gearStock) {
           data.gearStock.forEach((item, index) => {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/gear-default.svg',
-              link: `#gear-${index}`, // Since we don't have specific links, using hash
+              image: item.image || defaultImages[SectionCategory.GEAR],
+              link: `#gear-${index}`,
               category: SectionCategory.GEAR
             });
           });
@@ -100,7 +110,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/seeds-default.svg',
+              image: item.image || defaultImages[SectionCategory.SEEDS],
               link: `#seeds-${index}`,
               category: SectionCategory.SEEDS
             });
@@ -112,7 +122,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/eggs-default.svg',
+              image: item.image || defaultImages[SectionCategory.EGGS],
               link: `#eggs-${index}`,
               category: SectionCategory.EGGS
             });
@@ -124,7 +134,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/honey-default.svg',
+              image: item.image || defaultImages[SectionCategory.HONEY],
               link: `#honey-${index}`,
               category: SectionCategory.HONEY
             });
@@ -136,7 +146,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/cosmetics-default.svg',
+              image: item.image || defaultImages[SectionCategory.COSMETICS],
               link: `#cosmetics-${index}`,
               category: SectionCategory.COSMETICS
             });
@@ -148,7 +158,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: item.image || '/assets/images/presentation/night-default.svg',
+              image: item.image || defaultImages[SectionCategory.NIGHT],
               link: `#night-${index}`,
               category: SectionCategory.NIGHT
             });
@@ -192,7 +202,9 @@ export default function Sections() {
         <ContainerWrapper>
           <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
             <CircularProgress size={60} />
-            <Typography variant="h6" sx={{ mt: 2 }}>Loading stock data...</Typography>
+            <Typography variant="h6" sx={{ mt: 2 }}>
+              Loading stock data...
+            </Typography>
           </Stack>
         </ContainerWrapper>
       </>
@@ -205,7 +217,9 @@ export default function Sections() {
         <SectionHero heading="Craft Stunning Design with SaasAble Blocks" search={false} offer />
         <ContainerWrapper>
           <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
-            <Typography variant="h6" color="error" sx={{ mb: 2 }}>Error loading data: {error}</Typography>
+            <Typography variant="h6" color="error" sx={{ mb: 2 }}>
+              Error loading data: {error}
+            </Typography>
             <Button variant="contained" onClick={() => window.location.reload()}>
               Retry
             </Button>
@@ -245,7 +259,9 @@ export default function Sections() {
                   }}
                   onClick={() => {
                     setFilterBy(item.value);
-                    setFilterSections(item.value === '' ? sections : sections.filter((section) => section.category === item.value));
+                    setFilterSections(
+                      item.value === '' ? sections : sections.filter((section) => section.category === item.value)
+                    );
                   }}
                 >
                   {item.title}
@@ -253,7 +269,7 @@ export default function Sections() {
               ))}
             </Stack>
           </Stack>
-          
+
           {filterSections.length === 0 ? (
             <Stack sx={{ alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
               <Typography variant="h6" color="text.secondary">
@@ -286,7 +302,14 @@ export default function Sections() {
                           href={item.link}
                           component={NextLink}
                           aria-label={item.title}
-                          sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}
+                          sx={{
+                            position: 'absolute',
+                            top: 0,
+                            height: 1,
+                            width: 1,
+                            borderRadius: { xs: 6, sm: 8, md: 10 },
+                            zIndex: 1
+                          }}
                         />
                         <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
@@ -297,8 +320,9 @@ export default function Sections() {
                             alt={item.title}
                             loading="lazy"
                             onError={(e) => {
-                              // Fallback to a default image if the API image fails to load
-                              e.target.src = '/assets/images/presentation/default-item.svg';
+                              // Fallback to category-specific placeholder if image fails to load
+                              const category = item.category;
+                              e.target.src = defaultImages[category] || 'https://via.placeholder.com/150x150/gray/white?text=NO+IMAGE';
                             }}
                           />
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
