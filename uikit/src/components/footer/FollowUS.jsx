@@ -22,7 +22,7 @@ const socialIcons = [
     link: { href: `https://youtube.com/@valzyofc`, ...linkProps }
   },
   {
-    icon: 'tabler-filled-brand-whatsapp',
+    icon: 'tabler-brand-whatsapp',
     link: { href: `https://whatsapp.com/channel/0029Vah3uvQ11ulW8yfEyt28`, ...linkProps }
   },
   {
