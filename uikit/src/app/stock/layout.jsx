@@ -22,9 +22,9 @@ export default function Sections({ children }) {
 
         {/* scroll to top section */}
         <ScrollFab />
+         <Footer7 />
        </>
-     <Footer7 />
-    </SectionsLayout>
+     </SectionsLayout>
   );
 }
 
