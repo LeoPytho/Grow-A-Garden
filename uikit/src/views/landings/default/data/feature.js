@@ -50,7 +50,7 @@ export const hero = {
   },
   headLine: 'Grow Your Dream Garden on Roblox',
   captionLine: 'Cultivate unique plants, explore diverse biomes, and connect with friends in this immersive Roblox gardening game!',
-  primaryBtn: { children: 'Play Now', href: 'YOUR_ROBLOX_GAME_LINK_HERE' }, // **Important: Replace with actual Roblox game link**
+  primaryBtn: { children: 'Play Now', href: 'https://www.roblox.com/share?code=2ca99fb9df61604ab46a4f19574f3f63&type=ExperienceDetails&stamp=1750970777833' }, // **Important: Replace with actual Roblox game link**
   videoSrc: 'YOUR_GAME_TRAILER_VIDEO_LINK_HERE', // **Important: Replace with actual game trailer video link**
   videoThumbnail: 'YOUR_GAME_TRAILER_THUMBNAIL_HERE', // **Important: Replace with actual game trailer thumbnail link**
   listData: [
@@ -134,8 +134,8 @@ export const feature5 = {
 export const feature20 = {
   heading: 'Your Ultimate Gardening Adventure Awaits',
   caption: 'Ready to immerse yourself in the enchanting world of "Grow A Garden Map Game"?',
-  actionBtn: { children: 'Play Now on Roblox', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps },
-  secondaryBtn: { children: 'Watch Game Trailer', href: 'YOUR_GAME_TRAILER_LINK_HERE' },
+  actionBtn: { children: 'Play Now on Roblox', href: 'https://www.roblox.com/share?code=2ca99fb9df61604ab46a4f19574f3f63&type=ExperienceDetails&stamp=1750970777833', ...linkProps },
+  secondaryBtn: { children: 'Watch Game Cutscene', href: 'https://youtu.be/7BNT1xuTA20?si=T2MbDRRG-sSCXSG-' },
   features: [
     {
       icon: { name: 'tabler-leaf' },
@@ -175,10 +175,10 @@ export const feature21 = {
   heading: `Design Your Perfect Garden with Advanced In-Game Tools`,
   caption: 'Unlock powerful creative tools for streamlined, scalable, and visually stunning garden designs within the game.',
   image: '/assets/images/preview/IMG-20250626-WA0415.jpg',
-  primaryBtn: { children: 'Start Designing Your Garden', href: 'YOUR_ROBLOX_GAME_LINK_HERE', ...linkProps },
+  primaryBtn: { children: 'Start Designing Your Garden', href: 'https://www.roblox.com/share?code=2ca99fb9df61604ab46a4f19574f3f63&type=ExperienceDetails&stamp=1750970777833', ...linkProps },
   secondaryBtn: {
-    children: 'Explore Community Creations',
-    href: 'YOUR_COMMUNITY_GALLERY_LINK_HERE',
+    children: 'Explore Community',
+    href: 'https://discord.gg/carrot',
     ...linkProps
   },
   features: [
