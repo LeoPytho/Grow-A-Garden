@@ -41,7 +41,7 @@ export default function Copyright({ type = CopyrightType.TYPE1, textProps, isDiv
       <Typography variant="caption2" {...textProps} sx={{ color: 'text.secondary', ...textProps?.sx }}>
         Copyright © 2025
         <Link {...linkProps} href={branding.company.url} sx={{ ...linkProps.sx, ml: 0.5 }}>
-          {branding.company.name}
+          JKT48Connect
         </Link>
       </Typography>
       {type !== CopyrightType.TYPE3 && (
