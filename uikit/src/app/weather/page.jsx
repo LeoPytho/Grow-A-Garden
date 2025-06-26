@@ -268,7 +268,7 @@ export default function WeatherEvents() {
                   borderColor: alpha(theme.palette.primary.main, 0.5), // Subtle hover border
                 }
               }}
-              startAdornment={<SvgIcon name="tabler-search" color="grey.600" />} {/* Slightly darker icon */}
+              startAdornment={<SvgIcon name="tabler-search" color="grey.600" />} 
               onChange={handleSearchValue}
               value={searchValue}
             />
