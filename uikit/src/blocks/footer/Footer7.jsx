@@ -50,7 +50,7 @@ const data = [
     menu: [
       {
         label: 'Support',
-        link: { href: 'https://www.jkt48connect.my.id/donate, ...linkProps }
+        link: { href: 'https://www.jkt48connect.my.id/donate', ...linkProps }
       },
       {
         label: 'WhatsApp Channel',
