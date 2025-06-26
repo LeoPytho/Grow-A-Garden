@@ -63,11 +63,11 @@ const data = [
 const iconProps = { color: 'text.secondary' };
 
 const usefullLinks = [
-  {
+ /* {
     icon: <SvgIcon name="tabler-brand-figma" {...iconProps} />,
     title: 'Figma Version 1.1.0',
     href: 'https://www.figma.com/community/file/1425095061180549847'
-  },
+  },*/
   {
     icon: <SvgIcon name="tabler-route" {...iconProps} />,
     title: 'React Material UI v7',
@@ -76,7 +76,7 @@ const usefullLinks = [
   {
     icon: <SvgIcon name="tabler-sparkles" {...iconProps} />,
     title: 'Documentation',
-    href: DOCS_URL
+    href: 'https://docs.jkt48connect.my.id'
   }
 ];
 
