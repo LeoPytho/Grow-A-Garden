@@ -19,6 +19,7 @@ import { motion } from 'framer-motion'; // Import motion for animations
 import ContainerWrapper from '@/components/ContainerWrapper';
 import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
+import Footer from '@/components/Footer'; // Assuming you have a Footer component here
 
 // Define a mapping for item names to display names and icons
 const ITEM_CONFIG = {
@@ -95,6 +96,8 @@ export default function RestockTime() {
             </Typography>
           </Stack>
         </ContainerWrapper>
+        {/* Footer will be rendered here after content */}
+        <Footer />
       </>
     );
   }
@@ -113,6 +116,8 @@ export default function RestockTime() {
             </Button>
           </Stack>
         </ContainerWrapper>
+        {/* Footer will be rendered here after content */}
+        <Footer />
       </>
     );
   }
@@ -128,6 +133,8 @@ export default function RestockTime() {
             </Typography>
           </Stack>
         </ContainerWrapper>
+        {/* Footer will be rendered here after content */}
+        <Footer />
       </>
     );
   }
@@ -146,41 +153,42 @@ export default function RestockTime() {
             </Typography>
           </Box>
 
-          <Grid container spacing={4}> {/* Increased spacing for better visual separation */}
+          <Grid container spacing={4}>
             {Object.entries(restockData).map(([key, item], index) => {
               const config = ITEM_CONFIG[key] || {
-                displayName: key.charAt(0).toUpperCase() + key.slice(1), // Fallback display name
+                displayName: key.charAt(0).toUpperCase() + key.slice(1),
                 icon: 'tabler-question-mark',
                 description: 'Informasi restock untuk item ini.'
               };
 
               return (
-                <Grid item xs={12} sm={6} md={4} key={key}>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={key}> {/* Adjusted Grid sizes */}
                   <motion.div
                     initial="hidden"
                     whileInView="visible"
                     whileHover="hover"
                     viewport={{ once: true, amount: 0.3 }}
                     variants={cardVariants}
-                    custom={index} // Pass index for staggered animation
+                    custom={index}
                   >
                     <Card
                       sx={{
-                        height: '100%',
+                        height: '100%', // Ensure cards take full height of grid item
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        justifyContent: 'space-between', // Adjust to push content to top/bottom
+                        justifyContent: 'space-between',
                         p: 3,
-                        borderRadius: 4, // More rounded corners
-                        overflow: 'hidden', // Ensure overflow is hidden for inner effects
-                        position: 'relative', // For absolute positioning of background effects
-                        bgcolor: alpha(theme.palette.background.paper, 0.9), // Subtle transparency
-                        backdropFilter: 'blur(5px)', // Glassmorphism effect
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                        position: 'relative',
+                        bgcolor: alpha(theme.palette.background.paper, 0.9),
+                        backdropFilter: 'blur(5px)',
                         border: `1px solid ${alpha(theme.palette.divider, 0.15)}`,
-                        boxShadow: theme.shadows[6], // Default shadow
+                        boxShadow: theme.shadows[6],
+                        transition: 'all 0.3s ease-in-out', // Added transition for smooth hover
                         '&:hover': {
-                            boxShadow: theme.shadows[10], // Enhanced shadow on hover
+                            boxShadow: theme.shadows[10],
                         }
                       }}
                     >
@@ -208,10 +216,10 @@ export default function RestockTime() {
                             filter: 'blur(20px)'
                         }} />
 
-                      <CardContent sx={{ textAlign: 'center', width: '100%', zIndex: 1 }}>
+                      <CardContent sx={{ textAlign: 'center', width: '100%', zIndex: 1, flexGrow: 1 }}> {/* flexGrow to make content fill space */}
                         <Box
                           sx={{
-                            width: 100, // Larger icon container
+                            width: 100,
                             height: 100,
                             borderRadius: '50%',
                             bgcolor: alpha(theme.palette.primary.main, 0.1),
@@ -220,7 +228,7 @@ export default function RestockTime() {
                             justifyContent: 'center',
                             mx: 'auto',
                             mb: 2.5,
-                            boxShadow: `0px 0px 25px ${alpha(theme.palette.primary.main, 0.4)}`, // More vibrant shadow
+                            boxShadow: `0px 0px 25px ${alpha(theme.palette.primary.main, 0.4)}`,
                             transition: 'all 0.3s ease-in-out',
                             '&:hover': {
                               bgcolor: alpha(theme.palette.primary.main, 0.2),
@@ -228,7 +236,7 @@ export default function RestockTime() {
                             }
                           }}
                         >
-                          <SvgIcon name={config.icon} color="primary.main" size={56} /> {/* Larger icon */}
+                          <SvgIcon name={config.icon} color="primary.main" size={56} />
                         </Box>
                         <Typography variant="h5" component="div" sx={{ mb: 0.5, color: 'primary.dark', fontWeight: 'bold' }}>
                           {config.displayName}
@@ -237,11 +245,11 @@ export default function RestockTime() {
                           {config.description}
                         </Typography>
 
-                        <Stack spacing={1.5} sx={{ mt: 2 }}>
+                        <Stack spacing={1.5} sx={{ mt: 'auto' }}> {/* Push to bottom with mt: 'auto' */}
                           <Box sx={{
-                              p: 1.5, // More padding
-                              borderRadius: 2, // More rounded
-                              bgcolor: alpha(theme.palette.info.main, 0.1), // Info color background
+                              p: 1.5,
+                              borderRadius: 2,
+                              bgcolor: alpha(theme.palette.info.main, 0.1),
                               border: `1px solid ${alpha(theme.palette.info.main, 0.3)}`,
                               display: 'flex',
                               alignItems: 'center',
@@ -278,6 +286,7 @@ export default function RestockTime() {
           </Grid>
         </Stack>
       </ContainerWrapper>
+      <Footer /> {/* Render the Footer component here */}
     </>
   );
 }
