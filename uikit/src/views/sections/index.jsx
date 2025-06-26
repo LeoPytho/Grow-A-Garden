@@ -33,8 +33,17 @@ import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
 import Background from '@/images/graphics/Background';
 import Wave from '@/images/graphics/Wave';
 
-// Define the API endpoint
-const API_URL = 'https://v2.jkt48connect.my.id/api/growagarden/stock?apikey=JKTCONNECT';
+// --- Import the JKT48 API core library ---
+// Note: Since this is a 'use client' component,
+// you might need to ensure `@jkt48/core` is compatible with client-side bundling.
+// If it's a CommonJS module, you might need to dynamically import it or ensure
+// your Next.js config handles it correctly. For direct use in client components,
+// it's usually designed to be ES module compatible.
+// For now, let's assume it can be directly imported.
+import jkt48Api from '@jkt48/core'; // Adjust import if it's a default export or named export
+
+// Define your API Key
+const API_KEY = 'JKTCONNECT';
 
 export default function Sections() {
   const theme = useTheme();
@@ -54,33 +63,30 @@ export default function Sections() {
         }
         setError(null);
 
-        const response = await fetch(API_URL);
+        // --- Use jkt48Api.gag.getStock to fetch data ---
+        // Ensure jkt48Api.gag and jkt48Api.gag.getStock are defined in your @jkt48/core library.
+        // Based on your previous request for a 'growAGarden.js' module, this structure is expected.
+        const data = await jkt48Api.gag.getStock(API_KEY);
+        // -----------------------------------------------
 
-        // --- ENHANCED LOGGING START ---
-        if (!response.ok) {
-          const errorText = await response.text(); // Try to read response body for more details
-          console.error(`API Error: HTTP Status ${response.status}`, {
-            url: response.url,
-            statusText: response.statusText,
-            responseBody: errorText // Log the response body
-          });
-          throw new Error(`Server responded with status ${response.status}: ${response.statusText || 'Unknown Error'}.`);
+        // Enhanced logging for API response (still useful even with library)
+        if (!data) { // Assuming getStock might return null/undefined on internal library error
+             console.error("API Error: jkt48Api.gag.getStock returned no data.");
+             throw new Error("Failed to retrieve data from Grow A Garden API via library.");
         }
-        // --- ENHANCED LOGGING END ---
 
-        const data = await response.json();
         setStockData(data);
         setLastUpdated(new Date());
-      } catch (err) {
-        // --- ENHANCED LOGGING START ---
-        console.error("Failed to fetch Grow A Garden stock data. Details:", err);
-        // --- ENHANCED LOGGING END ---
 
-        let errorMessage = "Failed to load Grow A Garden data. Please try again later.";
+      } catch (err) {
+        console.error("Failed to fetch Grow A Garden stock data via @jkt48/core. Details:", err);
+
+        let errorMessage = "Gagal memuat data Grow A Garden. Silakan coba lagi nanti.";
         if (err instanceof TypeError && err.message === 'Failed to fetch') {
-          errorMessage = "Network error. Please check your internet connection.";
-        } else if (err.message.includes("Server responded with status")) {
-          errorMessage = `Data loading failed: ${err.message}`;
+          errorMessage = "Kesalahan jaringan. Mohon periksa koneksi internet Anda.";
+        } else if (err.message.includes("Failed to retrieve data") || err.message.includes("Server responded with status")) {
+          // Adapt error message based on potential library-thrown errors or network issues
+          errorMessage = `Gagal memuat data: ${err.message}`;
         }
         setError(errorMessage);
       } finally {
@@ -93,7 +99,7 @@ export default function Sections() {
     const intervalId = setInterval(fetchGrowAGardenData, 7000);
 
     return () => clearInterval(intervalId);
-  }, [stockData]);
+  }, [stockData]); // Keep dependency to allow re-fetches if stockData state changes unexpectedly, or remove if you want it to run only once on mount
 
   // --- Process and Filter Stock Data ---
   const processedItems = useMemo(() => {
@@ -138,7 +144,6 @@ export default function Sections() {
   const categoryFilters = useMemo(() => {
     if (!stockData) return [{ title: 'All', value: 'All' }];
     const categories = new Set();
-    // Only add categories that actually have items
     if (stockData.seedsStock && stockData.seedsStock.length > 0) categories.add('Seeds');
     if (stockData.gearStock && stockData.gearStock.length > 0) categories.add('Gears');
     if (stockData.eggStock && stockData.eggStock.length > 0) categories.add('Eggs');
@@ -146,7 +151,6 @@ export default function Sections() {
     if (stockData.cosmeticsStock && stockData.cosmeticsStock.length > 0) categories.add('Cosmetics');
     if (stockData.nightStock && stockData.nightStock.length > 0) categories.add('Night Items');
     if (stockData.easterStock && stockData.easterStock.length > 0) categories.add('Easter Items');
-
 
     return [{ title: 'All', value: 'All' }, ...Array.from(categories).map(cat => ({ title: cat, value: cat }))];
   }, [stockData]);
