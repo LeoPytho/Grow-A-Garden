@@ -14,8 +14,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress'; // For loading indicator
-import Alert from '@mui/material/Alert'; // For error messages
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
 
 // @third-party
 import { motion } from 'framer-motion';
@@ -27,9 +27,7 @@ import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
 
 import useFocusWithin from '@/hooks/useFocusWithin';
-import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle'; // Assuming this utility is correctly defined
-// GetImagePath might not be needed if images are direct URLs, we'll use item.image directly
-// import GetImagePath from '@/utils/GetImagePath';
+import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
 
 // @assets
 import Background from '@/images/graphics/Background';
@@ -51,43 +49,57 @@ export default function Sections() {
   useEffect(() => {
     const fetchGrowAGardenData = async () => {
       try {
-        // Only show loading for the initial fetch or if stockData is null
         if (stockData === null) {
           setLoading(true);
         }
-        setError(null); // Clear previous errors
+        setError(null);
 
         const response = await fetch(API_URL);
+
+        // --- ENHANCED LOGGING START ---
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorText = await response.text(); // Try to read response body for more details
+          console.error(`API Error: HTTP Status ${response.status}`, {
+            url: response.url,
+            statusText: response.statusText,
+            responseBody: errorText // Log the response body
+          });
+          throw new Error(`Server responded with status ${response.status}: ${response.statusText || 'Unknown Error'}.`);
         }
+        // --- ENHANCED LOGGING END ---
+
         const data = await response.json();
         setStockData(data);
         setLastUpdated(new Date());
       } catch (err) {
-        console.error("Failed to fetch Grow A Garden stock data:", err);
-        setError("Failed to load Grow A Garden data. Please try again later.");
+        // --- ENHANCED LOGGING START ---
+        console.error("Failed to fetch Grow A Garden stock data. Details:", err);
+        // --- ENHANCED LOGGING END ---
+
+        let errorMessage = "Failed to load Grow A Garden data. Please try again later.";
+        if (err instanceof TypeError && err.message === 'Failed to fetch') {
+          errorMessage = "Network error. Please check your internet connection.";
+        } else if (err.message.includes("Server responded with status")) {
+          errorMessage = `Data loading failed: ${err.message}`;
+        }
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
     };
 
-    // Initial fetch when component mounts
     fetchGrowAGardenData();
 
-    // Set up interval for polling every 7 seconds
-    const intervalId = setInterval(fetchGrowAGardenData, 7000); // 7000 ms = 7 seconds
+    const intervalId = setInterval(fetchGrowAGardenData, 7000);
 
-    // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, [stockData]); // Depend on stockData to prevent re-rendering when data comes
+  }, [stockData]);
 
   // --- Process and Filter Stock Data ---
   const processedItems = useMemo(() => {
     if (!stockData) return [];
 
     const allItems = [];
-    // Map API categories to more readable names and flatten the list
     if (stockData.seedsStock) {
       stockData.seedsStock.forEach(item => allItems.push({ ...item, category: 'Seeds' }));
     }
@@ -110,12 +122,10 @@ export default function Sections() {
       stockData.easterStock.forEach(item => allItems.push({ ...item, category: 'Easter Items' }));
     }
 
-    // Apply category filter
     let filteredByCategory = activeCategory === 'All'
       ? allItems
       : allItems.filter(item => item.category === activeCategory);
 
-    // Apply search filter
     if (searchValue) {
       filteredByCategory = filteredByCategory.filter(item =>
         item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -128,6 +138,7 @@ export default function Sections() {
   const categoryFilters = useMemo(() => {
     if (!stockData) return [{ title: 'All', value: 'All' }];
     const categories = new Set();
+    // Only add categories that actually have items
     if (stockData.seedsStock && stockData.seedsStock.length > 0) categories.add('Seeds');
     if (stockData.gearStock && stockData.gearStock.length > 0) categories.add('Gears');
     if (stockData.eggStock && stockData.eggStock.length > 0) categories.add('Eggs');
@@ -135,6 +146,7 @@ export default function Sections() {
     if (stockData.cosmeticsStock && stockData.cosmeticsStock.length > 0) categories.add('Cosmetics');
     if (stockData.nightStock && stockData.nightStock.length > 0) categories.add('Night Items');
     if (stockData.easterStock && stockData.easterStock.length > 0) categories.add('Easter Items');
+
 
     return [{ title: 'All', value: 'All' }, ...Array.from(categories).map(cat => ({ title: cat, value: cat }))];
   }, [stockData]);
@@ -146,19 +158,18 @@ export default function Sections() {
 
   const isFocusWithin = useFocusWithin();
 
-  // Helper to format last updated time
   const formatLastUpdated = (date) => {
     if (!date) return 'N/A';
     const now = new Date();
     const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     if (diffSeconds < 60) {
-      return `Last updated: ${diffSeconds} seconds ago`;
+      return `Terakhir diperbarui: ${diffSeconds} detik yang lalu`;
     } else if (diffSeconds < 3600) {
       const minutes = Math.floor(diffSeconds / 60);
-      return `Last updated: ${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+      return `Terakhir diperbarui: ${minutes} menit yang lalu`;
     } else {
-      return `Last updated: ${date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`; // Indonesian time format
+      return `Terakhir diperbarui: ${date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
     }
   };
 
@@ -166,10 +177,10 @@ export default function Sections() {
   return (
     <>
       <SectionHero
-        heading="Grow A Garden: Real-time Stock & Info"
-        caption="Stay updated on in-game item availability, weather, and restock timers for your gardening adventure!"
-        search={false} // Disable search from SectionHero if you have your own
-        offer={false} // Assuming 'offer' is not relevant here
+        heading="Grow A Garden: Informasi Stok & Real-time"
+        caption="Tetap update dengan ketersediaan item dalam game, kondisi cuaca, dan waktu restock untuk mengoptimalkan strategi berkebun Anda!"
+        search={false}
+        offer={false}
       />
       <ContainerWrapper>
         <Stack sx={{ py: 6, gap: { xs: 3, sm: 4, md: 5 } }}>
@@ -178,8 +189,8 @@ export default function Sections() {
             sx={{ alignItems: 'center', justifyContent: 'space-between', gap: { xs: 2.5, md: 1.5 } }}
           >
             <OutlinedInput
-              placeholder="Search for items... (e.g., Carrot, Watering Can, Rare Egg)"
-              slotProps={{ input: { 'aria-label': 'Search items' } }}
+              placeholder="Cari item... (contoh: Wortel, Alat Siram, Telur Langka)"
+              slotProps={{ input: { 'aria-label': 'Cari item' } }}
               sx={{ '.MuiOutlinedInput-input': { pl: 1.5 }, width: { sm: 456, xs: 1 } }}
               startAdornment={<SvgIcon name="tabler-search" color="grey.700" />}
               onChange={handleSearchValue}
@@ -210,7 +221,7 @@ export default function Sections() {
           <Box sx={{ textAlign: 'center', mt: 2, mb: 3 }}>
             <Typography variant="body2" color="text.secondary">
               **Informasi Penting:** Data terbaru selalu tersedia setiap **5 menit**.
-              Contohnya, jika data diperbarui pukul 17:00, maka data selanjutnya akan tersedia paling lambat pukul 17:05.
+              Contohnya, jika data diperbarui pukul 17.00, maka akan tersedia lagi di 17.05.
             </Typography>
             <Typography variant="caption" color="text.primary" sx={{ mt: 1, display: 'block' }}>
               {formatLastUpdated(lastUpdated)}
@@ -221,7 +232,7 @@ export default function Sections() {
           {loading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 200 }}>
               <CircularProgress />
-              <Typography variant="h6" sx={{ ml: 2 }}>Loading data...</Typography>
+              <Typography variant="h6" sx={{ ml: 2 }}>Memuat data...</Typography>
             </Box>
           )}
 
@@ -233,14 +244,14 @@ export default function Sections() {
 
           {!loading && !error && processedItems.length === 0 && (
             <Alert severity="info" sx={{ my: 3 }}>
-              No items found for the selected category or search term.
+              Tidak ada item yang ditemukan untuk kategori atau istilah pencarian yang dipilih.
             </Alert>
           )}
 
           {!loading && !error && processedItems.length > 0 && (
             <Grid container spacing={1.5}>
               {processedItems.map((item, index) => (
-                <Grid item xs={6} sm={4} md={4} key={item.name + item.category + index}> {/* Added key for uniqueness */}
+                <Grid item xs={6} sm={4} md={4} key={item.name + item.category + index}>
                   <GraphicsCard sx={{ overflow: 'hidden', WebkitTapHighlightColor: 'transparent' }}>
                     <motion.div
                       whileHover={{ scale: 1.02 }}
@@ -259,25 +270,22 @@ export default function Sections() {
                           ...(isFocusWithin && { '&:focus-within': generateFocusVisibleStyles(theme.palette.primary.main) })
                         }}
                       >
-                        {/* Link can be modified to go to item detail if available */}
                         <Link
-                          href={`#${item.category.replace(/\s/g, '-')}-${item.name.replace(/\s/g, '-')}`} // Simple anchor link for demonstration
+                          href={`#${item.category.replace(/\s/g, '-')}-${item.name.replace(/\s/g, '-')}`}
                           aria-label={`${item.name} Stock`}
                           sx={{ position: 'absolute', top: 0, height: 1, width: 1, borderRadius: { xs: 6, sm: 8, md: 10 }, zIndex: 1 }}
                         />
-                        <Background /> {/* Re-using background graphic */}
+                        <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
                           <CardMedia
                             component="img"
-                            // Use the image URL directly from the API, if available.
-                            // Fallback to a placeholder or empty string if not.
-                            image={item.image || '/path/to/placeholder-image.png'} // Provide a fallback image if item.image is empty
+                            image={item.image || '/assets/images/placeholder-item.png'} // Fallback placeholder
                             sx={{ px: '14.5%', pt: '16%', pb: { xs: 2, md: 1 }, objectFit: 'contain' }}
                             alt={`${item.name} image`}
                             loading="lazy"
                           />
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
-                            <Wave /> {/* Re-using wave graphic */}
+                            <Wave />
                           </Box>
                         </Box>
                         <Stack
@@ -297,12 +305,11 @@ export default function Sections() {
                             {item.name}
                           </Typography>
                           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            **Stock:** {item.value} {item.category}
+                            **Stok:** {item.value} {item.category}
                           </Typography>
-                          {/* Optionally display last seen if available in 'item' */}
                           {item.seen && (
                              <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-                               Last seen: {new Date(item.seen).toLocaleTimeString('id-ID')}
+                               Terakhir terlihat: {new Date(item.seen).toLocaleTimeString('id-ID')}
                              </Typography>
                           )}
                         </Stack>
