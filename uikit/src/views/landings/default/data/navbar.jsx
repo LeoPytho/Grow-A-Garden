@@ -17,10 +17,8 @@ export const navbar = {
   primaryBtn: { children: 'Buy Now', href: BUY_NOW_URL, ...linkProps },
   navItems: [
     { id: 'home', title: 'Home', link: '/' },
-    landingMegamenu,
-    { id: 'components', title: 'Blocks', link: SECTION_PATH },
-    { id: 'dashboard', title: 'Dashboard', link: ADMIN_PATH, ...linkProps },
-    pagesMegamenu,
-    { id: 'docs', title: 'Docs', link: DOCS_URL, ...linkProps, icon: 'tabler-pin-invoke' }
+    { id: 'stock', title: 'Stock', link: SECTION_PATH },
+    { id: 'weather', title: 'Weather', link: ADMIN_PATH, ...linkProps },
+    { id: 'restocktime', title: 'Restock time', link: DOCS_URL, ...linkProps, icon: 'tabler-pin-invoke' }
   ]
 };
