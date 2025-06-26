@@ -421,7 +421,7 @@ export default function Sections() {
   if (loading) {
     return (
       <>
-        <SectionHero heading="Craft Stunning Design with SaasAble Blocks" search={false} offer />
+        <SectionHero heading="Grow A Garden Stock Items" search={false} offer />
         <ContainerWrapper>
           <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
             <CircularProgress size={60} />
@@ -437,7 +437,7 @@ export default function Sections() {
   if (error) {
     return (
       <>
-        <SectionHero heading="Craft Stunning Design with SaasAble Blocks" search={false} offer />
+        <SectionHero heading="Grow A Garden Stock Items" search={false} offer />
         <ContainerWrapper>
           <Stack sx={{ py: 6, alignItems: 'center', justifyContent: 'center', minHeight: 400 }}>
             <Typography variant="h6" color="error" sx={{ mb: 2 }}>
