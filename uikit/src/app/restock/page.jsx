@@ -19,7 +19,6 @@ import { motion } from 'framer-motion'; // Import motion for animations
 import ContainerWrapper from '@/components/ContainerWrapper';
 import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
-import Footer from '@/components/Footer'; // Assuming you have a Footer component here
 
 // Define a mapping for item names to display names and icons
 const ITEM_CONFIG = {
@@ -96,9 +95,7 @@ export default function RestockTime() {
             </Typography>
           </Stack>
         </ContainerWrapper>
-        {/* Footer will be rendered here after content */}
-        <Footer />
-      </>
+        </>
     );
   }
 
