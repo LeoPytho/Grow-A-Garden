@@ -7,7 +7,7 @@ import NextLink from 'next/link';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
+//import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -26,7 +26,7 @@ import SectionHero from '@/components/SectionHero';
 import SvgIcon from '@/components/SvgIcon';
 
 import useFocusWithin from '@/hooks/useFocusWithin';
-import { PAGE_PATH } from '@/path';
+//import { PAGE_PATH } from '@/path';
 import { generateFocusVisibleStyles } from '@/utils/CommonFocusStyle';
 // import GetImagePath from '@/utils/GetImagePath'; // Not needed anymore for this approach
 
