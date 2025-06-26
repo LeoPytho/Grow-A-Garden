@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 // @project
 // Assuming your logo file is named 'logo.png' or similar and is in the 'public' folder or a subfolder like 'public/images'.
 // If your logo file is in './Logo/logo.png', adjust the path accordingly.
-import LogoImage from './logo.png'; // <--- UPDATED LINE
+import LogoImage from './20250626_000832.png'; // <--- UPDATED LINE
 
 /*************************** LOGO - MAIN  ***************************/
 
