@@ -7,7 +7,6 @@ import NextLink from 'next/link';
 // @mui
 import { alpha, useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -55,14 +54,224 @@ const filterList = [
   { title: 'Night Stock', value: SectionCategory.NIGHT }
 ];
 
-// Default fallback images for each category using data URLs (always work)
-const defaultImages = {
-  [SectionCategory.GEAR]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNENBRjUwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+R0VBUjwvdGV4dD4KPC9zdmc+',
-  [SectionCategory.SEEDS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjOEJDMzRBIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U0VFRFM8L3RleHQ+CjwvZz4KPC9zdmc+',
-  [SectionCategory.EGGS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkZDMTA3Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RUdHUzwvdGV4dD4KPC9zdmc+',
-  [SectionCategory.HONEY]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRkY5ODAwIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SE9ORVk8L3RleHQ+CjwvZz4KPC9zdmc+',
-  [SectionCategory.COSMETICS]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRTkxRTYzIi8+Cjx0ZXh0IHg9IjUwIiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Q09TTUV0SUNTPC90ZXh0Pgo8L3N2Zz4=',
-  [SectionCategory.NIGHT]: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjM0Y1MUI1Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TklHSFQ8L3RleHQ+CjwvZz4KPC9zdmc+'
+// Emoji mapping for items
+const emojiMap = {
+  // Fruits/Plants
+  'carrot': '🥕',
+  'strawberry': '🍓',
+  'blueberry': '🫐',
+  'orange tulip': '🧡🌷',
+  'tomato': '🍅',
+  'corn': '🌽',
+  'daffodil': '🌼',
+  'watermelon': '🍉',
+  'pumpkin': '🎃',
+  'apple': '🍎',
+  'bamboo': '🎍',
+  'coconut': '🥥',
+  'cactus': '🌵',
+  'dragon fruit': '🐉🍇',
+  'mango': '🥭',
+  'grape': '🍇',
+  'mushroom': '🍄',
+  'pepper': '🌶️',
+  'cacao': '🍫',
+  'lemon': '🍋',
+  'pineapple': '🍍',
+  'peach': '🍑',
+  'pear': '🍐',
+  'papaya': '🥭',
+  'banana': '🍌',
+  'passion fruit': '💜🍈',
+  'soul fruit': '👻🍇',
+  'cursed fruit': '💀🍇',
+  'chocolate carrot': '🍫🥕',
+  'red lollipop': '🍭',
+  'candy sunflower': '🌻🍬',
+  'easter egg': '🥚',
+  'candy blossom': '🌸🍬',
+  'raspberry': '🍓',
+  'cranberry': '🍒',
+  'durian': '🍈',
+  'eggplant': '🍆',
+  'venus fly trap': '🌿',
+  'lotus': '🌸',
+  'glowshroom': '✨🍄',
+  'mint': '🍃',
+  'moonflower': '🌙🌸',
+  'starfruit': '⭐🍇',
+  'moonglow': '🌕✨',
+  'moon blossom': '🌙🌸',
+  'cherry blossom': '🌸🍒',
+  'moon melon': '🌙🍉',
+  'beanstalk': '🌱',
+  'blood banana': '🩸🍌',
+  'moon mango': '🌙🥭',
+  'celestiberry': '🌌🍓',
+
+  // Gears
+  'watering can': '💧🥫',
+  'trowel': '🥄',
+  'basic sprinkler': '🚿',
+  'advanced sprinkler': '🚀🚿',
+  'godly sprinkler': '🙏🚿',
+  'lightning rod': '⚡️🎣',
+  'master sprinkler': '👑🚿',
+  'chocolate sprinkler': '🍫🚿',
+  'recall wrench': '🔧↩️',
+  'favorite tool': '❤️‍🩹🛠️',
+  'harvest tool': '🌾🛠️',
+  'star caller': '⭐📞',
+  'classic trowel': '🥄',
+
+  // Pets
+  'golden lab': '🐕🟨',
+  'dog': '🐶',
+  'bunny': '🐰',
+  'black bunny': '🐰🖤',
+  'chicken': '🐔',
+  'cat': '🐱',
+  'deer': '🦌',
+  'orange tabby': '🐈🟧',
+  'spotted deer': '🦌',
+  'pig': '🐷',
+  'rooster': '🐓',
+  'monkey': '🐒',
+  'cow': '🐄',
+  'silver monkey': '🐒🥈',
+  'sea otter': '🦦🌊',
+  'turtle': '🐢',
+  'polar bear': '🐻‍❄️',
+  'snail': '🐌',
+  'giant ant': '🐜',
+  'caterpillar': '🐛',
+  'praying mantis': '🙏🦗',
+  'dragonfly': '🦋',
+  'panda': '🐼',
+  'hedgehog': '🦔',
+  'mole': '🦔',
+  'frog': '🐸',
+  'echo frog': '🔊🐸',
+  'night owl': '🦉🌙',
+  'raccoon': '🦝',
+  'kiwi': '🥝',
+  'owl': '🦉',
+  'chicken zombie': '🧟🐔',
+  'blood owl': '🩸🦉',
+  'blood hedgehog': '🩸🦔',
+  'blood kiwi': '🩸🥝',
+  'grey mouse': '🐭',
+  'brown mouse': '🐭🟫',
+  'moon cat': '🌙🐱',
+  'squirrel': '🐿️',
+  'red giant ant': '🐜🔴',
+  'red fox': '🦊',
+
+  // Eggs
+  'common egg': '🥚',
+  'uncommon egg': '🥚',
+  'rare egg': '🥚',
+  'legendary egg': '🥚',
+  'mythical egg': '🥚',
+  'bug egg': '🥚🐛',
+  'night egg': '🥚🌙',
+
+  // Seed Packs
+  'night seed pack': '🌙🌱📦',
+  'seed pack': '🌱📦',
+  'seeds': '🌱',
+
+  // Cosmetics
+  'twilight crate': '🌌📦',
+  'frog fountain': '🐸⛲',
+  'wheelbarrow': '🛒',
+  'small wood table': '🪵',
+  'beta gnome': '🤖🧚‍♂️',
+  'green female gnome': '👩‍🌾🟢',
+  'blue gnome': '🧚‍♂️🔵',
+  'axe stump': '🪓🪵',
+  'bamboo wind chimes': '🎍🎐',
+  'bird bath': '🐦🛁',
+  'blue well': '💙🕳️',
+  'brown stone pillar': '🪨🟫',
+  'brown bench': '🪵🪑',
+  'brick stack': '🧱',
+  'bookshelf': '📚',
+  'brown well': '🟫🕳️',
+  'classic gnome crate': '📦🧚‍♂️',
+  'campfire': '🔥',
+  'clothesline': '👚👕',
+  'common gnome crate': '📦🧚‍♂️',
+  'compost bin': '♻️🗑️',
+  'cooking pot': '🍲',
+  'dark stone pillar': '🪨🌑',
+  'curved canopy': '🏕️',
+  'farmers gnome crate': '🧑‍🌾📦',
+  'flat canopy': '⛺',
+  'fun crate': '🎉📦',
+  'red tractor': '🚜🔴',
+  'green tractor': '🚜🟢',
+  'grey stone pillar': '🪨🌫️',
+  'hay bale': '🌾📦',
+  'lamp post': '💡',
+  'large path tile': '🛤️',
+  'large stone pad': '🪨',
+  'large wood arbour': '🪵🌳',
+  'large wood flooring': '🪵',
+  'large wood table': '🪵',
+  'log': '🪵',
+  'log bench': '🪵🪑',
+  'sign crate': '🪧📦',
+  'bloodmoon crate': '🩸🌕📦',
+  'red well': '❤️🕳️',
+  'medium circle tile': '🟠',
+  'torch': '🔦',
+  'small circle tile': '⚪',
+  'wood fence': '🪵🚧',
+  'small path tile': '🛤️',
+  'small wood flooring': '🪵',
+  'mini tv': '📺',
+  'rock pile': '🪨',
+  'light on ground': '💡⬇️',
+  'rake': '🍂',
+  'orange umbrella': '☂️🍊',
+  'medium wood flooring': '🪵',
+  'water trough': '💧',
+  'shovel grave': '🪦',
+  'white pottery': '🏺⚪',
+  'white bench': '🪑⚪',
+  'small stone pad': '🪨',
+  'small stone table': '🪨',
+  'small wood arbour': '🪵🌳',
+  'viney beam': '🌿🪵',
+  'viney ring walkway': '🌿⭕🛤️',
+  'square metal arbour': '🔲🌳',
+  'small stone lantern': '🪨🏮',
+  'hay bail': '🌾📦',
+  'long stone table': '🪨',
+  'medium stone table': '🪨',
+  'metal wind chime': '🎶🎐',
+  'mysterious crate': '❓📦',
+  'red pottery': '🏺🔴',
+  'ring walkway': '⭕🛤️',
+  'wood pile': '🪵🪵',
+  'yellow umbrella': '☂️🟡'
+};
+
+// Default fallback emojis for each category
+const defaultEmojis = {
+  [SectionCategory.GEAR]: '⚙️',
+  [SectionCategory.SEEDS]: '🌱',
+  [SectionCategory.EGGS]: '🥚',
+  [SectionCategory.HONEY]: '🍯',
+  [SectionCategory.COSMETICS]: '💅',
+  [SectionCategory.NIGHT]: '🌙'
+};
+
+// Function to get emoji for an item
+const getEmojiForItem = (itemName, category) => {
+  const normalizedName = itemName.toLowerCase().trim();
+  return emojiMap[normalizedName] || defaultEmojis[category] || '📦';
 };
 
 /***************************  SECTIONS LAYOUT  ***************************/
@@ -98,7 +307,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.GEAR),
+              emoji: getEmojiForItem(item.name, SectionCategory.GEAR),
               link: `#gear-${index}`,
               category: SectionCategory.GEAR
             });
@@ -110,7 +319,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.SEEDS),
+              emoji: getEmojiForItem(item.name, SectionCategory.SEEDS),
               link: `#seeds-${index}`,
               category: SectionCategory.SEEDS
             });
@@ -122,7 +331,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.EGGS),
+              emoji: getEmojiForItem(item.name, SectionCategory.EGGS),
               link: `#eggs-${index}`,
               category: SectionCategory.EGGS
             });
@@ -134,7 +343,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.HONEY),
+              emoji: getEmojiForItem(item.name, SectionCategory.HONEY),
               link: `#honey-${index}`,
               category: SectionCategory.HONEY
             });
@@ -146,7 +355,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.COSMETICS),
+              emoji: getEmojiForItem(item.name, SectionCategory.COSMETICS),
               link: `#cosmetics-${index}`,
               category: SectionCategory.COSMETICS
             });
@@ -158,7 +367,7 @@ export default function Sections() {
             transformedSections.push({
               title: item.name,
               subTitle: `${item.value} in stock`,
-              image: getImageSrc(item.image, SectionCategory.NIGHT),
+              emoji: getEmojiForItem(item.name, SectionCategory.NIGHT),
               link: `#night-${index}`,
               category: SectionCategory.NIGHT
             });
@@ -192,25 +401,6 @@ export default function Sections() {
     });
     setFilterSections(newData);
   }, [searchValue, sections]);
-
-  // Function to handle image loading with proxy for external images
-  const getImageSrc = (originalSrc, category) => {
-    if (!originalSrc) {
-      return defaultImages[category];
-    }
-    
-    // Check if it's an external image (postimg.cc, etc.)
-    if (originalSrc.startsWith('http') && !originalSrc.includes(window.location.hostname)) {
-      // Option 1: Use a proxy service (more reliable)
-      return `https://images.weserv.nl/?url=${encodeURIComponent(originalSrc)}`;
-      
-      // Option 2: Alternative proxy services (uncomment if the above doesn't work)
-      // return `https://cors-anywhere.herokuapp.com/${originalSrc}`;
-      // return `/api/proxy-image?url=${encodeURIComponent(originalSrc)}`;
-    }
-    
-    return originalSrc;
-  };
 
   const isFocusWithin = useFocusWithin();
 
@@ -332,36 +522,27 @@ export default function Sections() {
                         />
                         <Background />
                         <Box sx={{ position: 'absolute', top: 0, width: 1, height: 1, textAlign: 'center' }}>
+                          {/* Emoji display instead of CardMedia */}
                           <Box
                             sx={{
                               px: '14.5%',
                               pt: '16%',
                               pb: { xs: 2, md: 1 },
-                              maxHeight: '60%',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'center'
+                              justifyContent: 'center',
+                              height: '60%'
                             }}
                           >
-                            <img
-                              src={item.image}
-                              alt={item.title}
-                              style={{
-                                maxWidth: '100%',
-                                maxHeight: '100%',
-                                objectFit: 'contain'
+                            <Typography
+                              sx={{
+                                fontSize: { xs: '3rem', sm: '4rem', md: '5rem' },
+                                lineHeight: 1,
+                                userSelect: 'none'
                               }}
-                              loading="lazy"
-                              onError={(e) => {
-                                // Fallback to category-specific placeholder if image fails to load
-                                const category = item.category;
-                                e.target.src = defaultImages[category];
-                              }}
-                              onLoad={(e) => {
-                                // Hide any loading indicator if you have one
-                                e.target.style.opacity = '1';
-                              }}
-                            />
+                            >
+                              {item.emoji}
+                            </Typography>
                           </Box>
                           <Box sx={{ '& div': { alignItems: 'center', pt: 0.875 } }}>
                             <Wave />
